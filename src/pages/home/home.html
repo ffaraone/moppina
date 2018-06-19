@@ -7,8 +7,12 @@
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <button ion-button color="secondary" (click)="play()">Play</button>
+  <button ion-button color="danger" (click)="stop()">Stop</button>
+  <ion-item>
+    <ion-range min="0" max="100" [(ngModel)]="volume" debounce="200" (ionChange)="changeVolume()">
+      <ion-icon small range-left name="volume-low"></ion-icon>
+      <ion-icon range-right name="volume-high"></ion-icon>
+    </ion-range>
+  </ion-item>
 </ion-content>

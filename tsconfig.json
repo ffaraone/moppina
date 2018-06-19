@@ -24,5 +24,10 @@
   "compileOnSave": false,
   "atom": {
     "rewriteTsconfig": false
-  }
+  },
+  "typeAcquisition": {
+        "include": [
+            "mopidy"
+        ]
+    }
 }
