@@ -1,25 +1,25 @@
-<ion-content>
-    <div class="controls-box">
-      <div class="buttons-box">
-          <button ion-fab color="mh-blue" mini>
+<ion-content [ngStyle]="{'background-image': 'url(' + backgroundImage + ')'}">
+    <div class="volume-box">
+        <ion-range min="0" max="100" color="mh-blue" snap="true" step="10">
+            <ion-icon range-left name="volume-mute" color="mh-blue" class="volume-icon"></ion-icon>
+            <ion-icon name="volume-up" range-right color="mh-blue" class="volume-icon"></ion-icon>
+        </ion-range>
+    </div>
+    <div class="center-box">
+        <div class="cover-image-box">
+            <img src="assets/imgs/folder.jpg">
+          </div>
+      <div class="playback-buttons-box">
+          <button ion-fab color="mh-blue" class="playback-skip-button">
               <ion-icon name="skip-backward"></ion-icon>
             </button>
-            <button ion-fab color="mh-blue">
+            <button ion-fab color="mh-blue"  class="playback-play-pause-button">
               <ion-icon name="pause"></ion-icon>
             </button>
-            <button ion-fab color="mh-blue" mini>
+            <button ion-fab color="mh-blue" class="playback-skip-button">
               <ion-icon name="skip-forward"></ion-icon>
             </button>
       </div>
-      <div class="volume-box">
-          <ion-range min="0" max="100" color="mh-blue" snap="true" step="10">
-              <ion-icon range-left name="volume-mute" color="mh-blue" class="volume-icon"></ion-icon>
-              <ion-icon name="volume-up" range-right color="mh-blue" class="volume-icon"></ion-icon>
-          </ion-range>
-      </div>
-    </div>
-    <div class="cover-image-box">
-      <img src="assets/imgs/folder.jpg">
     </div>
     <div class="seek-box">
       <ion-range min="0" max="100" color="mh-blue">

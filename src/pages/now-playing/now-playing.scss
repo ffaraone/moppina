@@ -3,6 +3,7 @@ page-now-playing {
         background-image: url('../../assets/imgs/background.jpg');
         background-repeat: no-repeat;
         background-position: center;
+        background-size: cover;
     }
     .scroll-content {
         display: flex;
@@ -11,23 +12,37 @@ page-now-playing {
     }
     .cover-image-box {
         display: flex;
-        justify-content: center;
+        justify-content: left;
+        padding-left: 15px;
     }
     .cover-image-box img {
-        height: 220px;
-        width: 220px;
+        height: 270px;
+        width: 270px;
+        opacity: 0.8;
     }
-    .controls-box {
+    .center-box {
         display: flex;
         justify-content: space-between;
-        padding-top: 15px;
     }
-    .buttons-box {
+    .playback-buttons-box {
         display: flex;
-        justify-content: left;
+        justify-content: space-evenly;
+        align-items: center;
+        width: 65%;
     }
+    .playback-skip-button {
+        opacity: 0.8;
+        zoom: 1.2;
+    }
+    .playback-play-pause-button {
+        opacity: 0.8;
+        zoom: 2;
+    }   
     .volume-box {
-        width: 60%;
+        width: 100%; 
+        padding-left: 10px; 
+        padding-right: 10px; 
+        padding-top: 15px
     }
     .seek-box {
         width: 100%; 
