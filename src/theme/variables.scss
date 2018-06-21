@@ -38,7 +38,9 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  mh-blue:    #1b6bab,
+  mh-green:   #5df151
 );
 
 
@@ -70,8 +72,14 @@ $colors: (
 // so that the above variables are used and Ionic's
 // default are overridden.
 
-@import "ionic.theme.default";
+// @import "ionic.theme.default";
 
+@import "ionic.theme.dark";
+
+$range-ios-knob-background-color: map-get($colors, mh-blue);
+
+$tabs-ios-tab-color-inactive: white;
+$tabs-ios-tab-color-active: map-get($colors, mh-green);
 
 // Ionicons
 // --------------------------------------------------

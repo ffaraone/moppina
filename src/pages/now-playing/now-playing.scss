@@ -1,0 +1,44 @@
+page-now-playing {
+    ion-content {
+        background-image: url('../../assets/imgs/background.jpg');
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .scroll-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .cover-image-box {
+        display: flex;
+        justify-content: center;
+    }
+    .cover-image-box img {
+        height: 220px;
+        width: 220px;
+    }
+    .controls-box {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 15px;
+    }
+    .buttons-box {
+        display: flex;
+        justify-content: left;
+    }
+    .volume-box {
+        width: 60%;
+    }
+    .seek-box {
+        width: 100%; 
+        padding-left: 10px; 
+        padding-right: 10px; 
+        padding-bottom: 15px
+    }
+    .seek-icon {
+        zoom: 2;
+    }
+    .volume-icon {
+        zoom: 2;
+    }
+}
