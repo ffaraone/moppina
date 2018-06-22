@@ -8,23 +8,29 @@
     <div class="center-box">
         <div class="cover-image-box">
             <img src="assets/imgs/folder.jpg">
-          </div>
-      <div class="playback-buttons-box">
-          <button ion-fab color="mh-blue" class="playback-skip-button">
-              <ion-icon name="skip-backward"></ion-icon>
-            </button>
-            <button ion-fab color="mh-blue"  class="playback-play-pause-button">
-              <ion-icon name="pause"></ion-icon>
-            </button>
-            <button ion-fab color="mh-blue" class="playback-skip-button">
-              <ion-icon name="skip-forward"></ion-icon>
-            </button>
-      </div>
+        </div>
+        <div class="center-right-box">
+            <div class="playback-buttons-box">
+                    <button ion-fab color="mh-blue" class="playback-skip-button">
+                        <ion-icon name="skip-backward"></ion-icon>
+                    </button>
+                    <button ion-fab color="mh-blue" class="playback-play-pause-button">
+                        <ion-icon [name]="playPauseIcon"></ion-icon>
+                    </button>
+                    <button ion-fab color="mh-blue" class="playback-skip-button">
+                        <ion-icon name="skip-forward"></ion-icon>
+                    </button>
+            </div>
+            <div>
+                <h1>{{ trackName }}</h1>
+            </div>
+        </div>
+
     </div>
     <div class="seek-box">
-      <ion-range min="0" max="100" color="mh-blue">
-          <ion-icon range-left name="rewind" color="mh-blue" class="seek-icon"></ion-icon>
-          <ion-icon name="fastforward" range-right color="mh-blue" class="seek-icon"></ion-icon>
-      </ion-range>
+        <ion-range min="0" [max]="trackLength" [(ngModel)]="trackSeekPos" color="mh-blue">
+            <ion-icon range-left name="rewind" color="mh-blue" class="seek-icon"></ion-icon>
+            <ion-icon name="fastforward" range-right color="mh-blue" class="seek-icon"></ion-icon>
+        </ion-range>
     </div>
-  </ion-content>
+</ion-content>

@@ -34,13 +34,15 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #488aff,
-  secondary:  #32db64,
-  danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #222,
-  mh-blue:    #4595dd,
-  mh-green:   #5df151
+  primary:        #488aff,
+  secondary:      #32db64,
+  danger:         #f53d3d,
+  light:          #f4f4f4,
+  dark:           #222,
+  mh-blue:        #54ffff,
+  mh-dark-blue:   #387e7d,
+  mh-green:       #22fb3b,
+  mh-dark-green:  #147c1b
 );
 
 
@@ -77,8 +79,9 @@ $colors: (
 @import "ionic.theme.dark";
 
 $range-ios-knob-background-color: map-get($colors, mh-blue);
+$range-ios-bar-background-color: map-get($colors, mh-dark-blue);
 
-$tabs-ios-tab-color-inactive: white;
+$tabs-ios-tab-color-inactive: map-get($colors, mh-dark-green);
 $tabs-ios-tab-color-active: map-get($colors, mh-green);
 
 // Ionicons
