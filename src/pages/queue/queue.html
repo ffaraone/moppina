@@ -1,71 +1,12 @@
-<!--
-  Generated template for the QueuePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-title>queue</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-  <ion-input type="text"></ion-input>
-  <ion-list>
-    <ion-item>
-      <h3>jnjii</h3>
-      <p>jijijiji</p>
-      <p>huhuuuhu</p>
-    </ion-item>
-    <ion-item>
-      <h3>jnjii</h3>
-      <p>jijijiji</p>
-      <p>huhuuuhu</p>
-    </ion-item>
-    <ion-item>
-      <h3>jnjii</h3>
-      <p>jijijiji</p>
-      <p>huhuuuhu</p>
-    </ion-item>
-    <ion-item>
-      <h3>jnjii</h3>
-      <p>jijijiji</p>
-      <p>huhuuuhu</p>
-    </ion-item>
-    <ion-item>
-      <h3>jnjii</h3>
-      <p>jijijiji</p>
-      <p>huhuuuhu</p>
-    </ion-item>
-    <ion-item>
-      <h3>jnjii</h3>
-      <p>jijijiji</p>
-      <p>huhuuuhu</p>
-    </ion-item>
-    <ion-item>
-      <h3>jnjii</h3>
-      <p>jijijiji</p>
-      <p>huhuuuhu</p>
-    </ion-item>
-    <ion-item>
-      <h3>jnjii</h3>
-      <p>jijijiji</p>
-      <p>huhuuuhu</p>
-    </ion-item>
-    <ion-item>
-      <h3>jnjii</h3>
-      <p>jijijiji</p>
-      <p>huhuuuhu</p>
-    </ion-item>
-    <ion-item>
-      <h3>jnjii</h3>
-      <p>jijijiji</p>
-      <p>huhuuuhu</p>
-    </ion-item>
-
+<ion-content>
+  <ion-list #list>
+      <ion-item *ngFor="let track of tracks" (tap)="playTrack(track)">
+          <ion-thumbnail item-start>
+            <img src="{{ track.album_art }}">
+          </ion-thumbnail>
+          <h2 ion-text color="mh-blue">{{ track.name }}</h2>
+          <p ion-text color="mh-dark-blue">{{ track.artist }} - {{ track.album }}</p>
+          <ion-icon *ngIf="track.current" item-end name="play"></ion-icon>
+        </ion-item>
   </ion-list>
 </ion-content>

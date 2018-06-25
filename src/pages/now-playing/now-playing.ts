@@ -50,7 +50,7 @@ export class NowPlayingPage {
     this.mopidy = new Mopidy({
       webSocketUrl: 'ws://mappina.velasuci.com:6680/mopidy/ws/'
     });
-    this.mopidy.on(console.log.bind(console));
+    // this.mopidy.on(console.log.bind(console));
     this.mopidy.on('state:offline', () => {
       this.showLoading();
     });

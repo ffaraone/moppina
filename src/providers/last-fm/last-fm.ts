@@ -1,7 +1,8 @@
 import { getArtistName } from '../../utils/index';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { Storage } from '@ionic/storage';
+import { Md5 } from 'ts-md5/dist/md5';
 
 /*
   Generated class for the LastFmProvider provider.
@@ -18,34 +19,48 @@ export class LastFmProvider {
 
 
 
-  constructor(public http: HttpClient) {
+  constructor(
+    private http: HttpClient, 
+    private storage: Storage) {
   }
 
   getAlbumArt(track: any): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      let params: HttpParams = new HttpParams();
-      params = params.set('api_key', API_KEY);
-      params = params.set('method', 'album.getinfo');
-      params = params.set('format', 'json');
-      params = params.set('artist', getArtistName(track));
-      params = params.set('album', track.album.name);
-      this.http.get('http://ws.audioscrobbler.com/2.0/', {
-        params: params
-      }).subscribe(
-        (data: any) => {
-          if (data.album && data.album.image) {
-            for (const img of data.album.image) {
-              if (img.size === 'extralarge' || img.size === 'mega' || img.size === '') {
-                resolve(img['#text']);
-              }
-            }
+      const artist = getArtistName(track);
+      const album = track.album.name;
+      const key: string = Md5.hashStr(artist + album) as string;
+      this.storage.get(key)
+        .then((val) => {
+          if (val) {
+            resolve(val);
+            return;
           }
-          reject('no image found');
-        },
-        (err) => {
-          reject(err);
-        }
-      );
+          let params: HttpParams = new HttpParams();
+          params = params.set('api_key', API_KEY);
+          params = params.set('method', 'album.getinfo');
+          params = params.set('format', 'json');
+          params = params.set('artist', artist);
+          params = params.set('album', album);
+          this.http.get('http://ws.audioscrobbler.com/2.0/', {
+            params: params
+          }).subscribe(
+            (data: any) => {
+              if (data.album && data.album.image) {
+                for (const img of data.album.image) {
+                  if (img.size === 'extralarge' || img.size === 'mega' || img.size === '') {
+                    const imgUrl = img['#text'];
+                    this.storage.set(key, imgUrl);
+                    resolve(imgUrl);
+                  }
+                }
+              }
+              reject('no image found');
+            },
+            (err) => {
+              reject(err);
+            }
+          );
+        });
     });
   }
 }
