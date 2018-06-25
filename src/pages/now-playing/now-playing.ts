@@ -1,13 +1,16 @@
+import { LastFmProvider } from '../../providers/last-fm/last-fm';
+import { getArtistName, getTrackCodec } from '../../utils/index';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {
+  IonicPage,
+  LoadingController,
+  NavController,
+  NavParams
+  } from 'ionic-angular';
 import * as Mopidy from 'mopidy';
 
-/**
- * Generated class for the NowPlayingPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
+const DEFAULT_ALBUM_ART = 'assets/imgs/default.png';
 
 @IonicPage()
 @Component({
@@ -18,31 +21,48 @@ export class NowPlayingPage {
 
   mopidy: Mopidy;
 
+
+  mopidyOnline: boolean = false;
+
   backgroundImage: string = '../../assets/imgs/background2.jpg';
   playPauseIcon: string = 'play';
   trackLength: number = 100;
   trackSeekPos: number = 0;
   trackName: string = '';
+  trackArtist: string = '';
+  trackAlbum: string = '';
+  trackCodec: string = '';
+  trackBitrate: string = '';
+  albumArt: string = DEFAULT_ALBUM_ART;
 
   currentState: string = '';
-
   volume: number = 0;
-  //btnPlayEnabled: boolean = false;
+  loading: any;
+  loadingVisible: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(
+    private navCtrl: NavController,
+    private loadCtrl: LoadingController,
+    private navParams: NavParams,
+    private lastFM: LastFmProvider) {
+    
+    this.showLoading();
     this.mopidy = new Mopidy({
       webSocketUrl: 'ws://mappina.velasuci.com:6680/mopidy/ws/'
     });
-    //this.mopidy.on(console.log.bind(console));
+    this.mopidy.on(console.log.bind(console));
+    this.mopidy.on('state:offline', () => {
+      this.showLoading();
+    });
     this.mopidy.on('state:online', () => {
+      this.hideLoading();
+      this.mopidyOnline = true;
       this.mopidy.mixer.getVolume().then(vol => this.volume = vol);
       this.mopidy.playback.getState().then((state) => {
         this.currentState = state;
         this.playPauseIcon = state === 'playing' ? 'pause': 'play';
       });
       this.mopidy.playback.getCurrentTrack().then((track) => {
-        console.log('current track');
-        console.log(track);
         if (!track) {
           this.trackLength = 100;
           this.trackSeekPos = 0;
@@ -50,12 +70,17 @@ export class NowPlayingPage {
         }
         this.trackLength = track.length;
         this.trackName = track.name;
-          setInterval(() => {
-            this.mopidy.playback.getTimePosition().then((val) => {
-              this.trackSeekPos = val;
-            });
-          }, 1000);
-          this.configureEventHandlers();
+        this.trackAlbum = track.album.name;
+        this.trackArtist = getArtistName(track);
+        this.trackCodec = getTrackCodec(track.uri);
+        this.trackBitrate = track.bitrate/1000 + ' kbit/s';
+        this.getAlbumArt(track);
+        setInterval(() => {
+          this.mopidy.playback.getTimePosition().then((val) => {
+            this.trackSeekPos = val;
+          });
+        }, 1000);
+        this.configureEventHandlers();
       })
       .catch((err) => {
         console.log('catch');
@@ -66,10 +91,21 @@ export class NowPlayingPage {
         console.log(d);
       });
     });
-
+  }
+  showLoading() {
+    if (!this.loadingVisible) {
+      this.loadingVisible = true;
+      this.loading = this.loadCtrl.create({ content: 'Waiting for Mopidy to became online...'});
+      this.loading.present();
+    }
+  }
+  hideLoading() {
+    if (this.loadingVisible) {
+      this.loadingVisible = false;
+      this.loading.dismiss();
+    }
 
   }
-
   playPause() {
     if (this.currentState === 'playing') {
       this.mopidy.playback.pause();
@@ -84,14 +120,37 @@ export class NowPlayingPage {
     this.mopidy.playback.previous();
   }
 
+  getAlbumArt(track) {
+    this.mopidy.library.getImages([track.uri]).then((imageResults) => {
+      for (const uri in imageResults) {
+        if (imageResults[uri].length > 0) {
+          console.log(imageResults[uri]);
+          return;
+        }
+      }
+      this.lastFM.getAlbumArt(track)
+        .then(res => this.albumArt = res)
+        .catch((err) => {
+          this.albumArt = DEFAULT_ALBUM_ART;
+          console.log(err);
+        });
+    });
+  }
+
   configureEventHandlers() {
     // this.mopidy.on('track_playback_started', (track) => {
     //   console.log('track playback started: ' + JSON.stringify(track, null, 4));
     // });
     this.mopidy.on('event:trackPlaybackStarted', (data) => {
       if (data.tl_track) {
-        this.trackLength = data.tl_track.track.length;
-        this.trackName = data.tl_track.track.name;
+        const track = data.tl_track.track;
+        this.trackLength = track.length;
+        this.trackName = track.name;
+        this.trackAlbum = track.album.name;
+        this.trackArtist = getArtistName(track);
+        this.trackCodec = getTrackCodec(track.uri);
+        this.trackBitrate = track.bitrate/1000 + ' kbit/s';
+        this.getAlbumArt(track);
       }
     });
     this.mopidy.on('event:volumeChanged', (vol) => {
@@ -111,6 +170,7 @@ export class NowPlayingPage {
       this.trackSeekPos = data.time_position;
     });
     this.mopidy.on('event:trackPlaybackResumed', (data) => {
+      console.log(data.tl_track.track.uri);
       this.trackLength = data.tl_track.track.length;
       this.trackSeekPos = data.time_position;
     });
