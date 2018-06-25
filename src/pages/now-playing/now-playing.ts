@@ -40,6 +40,8 @@ export class NowPlayingPage {
   loading: any;
   loadingVisible: boolean = false;
 
+  progressUpdater: any;
+
   constructor(
     private navCtrl: NavController,
     private loadCtrl: LoadingController,
@@ -50,7 +52,7 @@ export class NowPlayingPage {
     this.mopidy = new Mopidy({
       webSocketUrl: 'ws://mappina.velasuci.com:6680/mopidy/ws/'
     });
-    // this.mopidy.on(console.log.bind(console));
+    this.mopidy.on(console.log.bind(console));
     this.mopidy.on('state:offline', () => {
       this.showLoading();
     });
@@ -61,6 +63,9 @@ export class NowPlayingPage {
       this.mopidy.playback.getState().then((state) => {
         this.currentState = state;
         this.playPauseIcon = state === 'playing' ? 'pause': 'play';
+        if (state === 'playing') {
+          this.startProgressUpdater();
+        }
       });
       this.mopidy.playback.getCurrentTrack().then((track) => {
         if (!track) {
@@ -75,11 +80,6 @@ export class NowPlayingPage {
         this.trackCodec = getTrackCodec(track.uri);
         this.trackBitrate = track.bitrate/1000 + ' kbit/s';
         this.getAlbumArt(track);
-        setInterval(() => {
-          this.mopidy.playback.getTimePosition().then((val) => {
-            this.trackSeekPos = val;
-          });
-        }, 1000);
         this.configureEventHandlers();
       })
       .catch((err) => {
@@ -104,7 +104,6 @@ export class NowPlayingPage {
       this.loadingVisible = false;
       this.loading.dismiss();
     }
-
   }
   playPause() {
     if (this.currentState === 'playing') {
@@ -137,10 +136,20 @@ export class NowPlayingPage {
     });
   }
 
+  startProgressUpdater() {
+    this.progressUpdater = setInterval(() => {
+      this.mopidy.playback.getTimePosition().then((val) => {
+        this.trackSeekPos = val;
+      });
+    }, 1000);
+  }
+  stopProgressUpdater() {
+    if (this.progressUpdater) {
+      clearInterval(this.progressUpdater);
+    }
+  }
+
   configureEventHandlers() {
-    // this.mopidy.on('track_playback_started', (track) => {
-    //   console.log('track playback started: ' + JSON.stringify(track, null, 4));
-    // });
     this.mopidy.on('event:trackPlaybackStarted', (data) => {
       if (data.tl_track) {
         const track = data.tl_track.track;
@@ -157,12 +166,13 @@ export class NowPlayingPage {
       this.volume = vol.volume;
     });
     this.mopidy.on('event:playbackStateChanged', (state) => {
-      console.log('playback state changed ' + state);
       this.currentState = state.new_state;
       if (state.new_state === 'playing') {
         this.playPauseIcon = 'pause';
+        this.startProgressUpdater();
       } else {
         this.playPauseIcon = 'play';
+        this.stopProgressUpdater();
       }
     });
     this.mopidy.on('event:trackPlaybackPaused', (data) => {
