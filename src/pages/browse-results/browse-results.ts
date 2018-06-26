@@ -1,3 +1,4 @@
+import { LastFmProvider } from '../../providers/last-fm/last-fm';
 import { Component } from '@angular/core';
 import {
   ActionSheetController,
@@ -30,7 +31,8 @@ export class BrowseResultsPage {
     private navCtrl: NavController, 
     private loadCtrl: LoadingController,
     private asCtrl: ActionSheetController,
-    private navParams: NavParams) {
+    private navParams: NavParams,
+    private lastFM: LastFmProvider) {
       this.mopidy = new Mopidy({
         webSocketUrl: 'ws://mappina.velasuci.com:6680/mopidy/ws/'
       });
@@ -55,11 +57,17 @@ export class BrowseResultsPage {
     console.log(ref.uri);
     this.showLoading();
     this.mopidy.library.browse(ref.uri).then((refs) => {
-      
       this.hideLoading();
       this.title = ref.name;
       this.results = refs;
-      console.log(refs);
+      for (let r of refs) {
+        this.mopidy.library.lookup(r.uri).then((tltracks) => {
+          if (r.uri.startsWith('spotifyweb')) {
+            console.log(tltracks);
+          }
+          this.getAlbumArt(r, tltracks);
+        });
+      }
     });
   }
   showLoading() {
@@ -114,9 +122,36 @@ export class BrowseResultsPage {
       this.navCtrl.push('BrowseResultsPage', {ref: ref});
     } else {
       this.mopidy.tracklist.add(null, null, ref.uri).then((tl_track) => {
-        console.log(tl_track);
         this.mopidy.playback.play(null, tl_track.tlid);
       });
     } 
+  }
+  getAlbumArt(ref, tltracks): Promise<any> {
+    console.log('get album art for uri ' + ref.uri);
+    return new Promise<any>((resolve, reject) => {
+      this.mopidy.library.getImages([ref.uri]).then((imageResults) => {
+        for (const uri in imageResults) {
+          if (imageResults[uri].length > 0) {
+            ref.album_art = imageResults[uri][0]['uri'];
+            resolve()
+            return;
+          }
+        }
+        if (tltracks && tltracks instanceof Array && tltracks.length > 0) {
+          console.log('lookup lastfm for album art');
+          this.lastFM.getAlbumArt(tltracks[0])
+          .then(res => {
+            ref.album_art = res;
+            resolve();
+          })
+          .catch((err) => {
+            console.log(err);
+            resolve();   
+          });
+        } else {
+          resolve();
+        }
+      });
+    })
   }
 }

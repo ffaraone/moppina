@@ -6,8 +6,11 @@
 <ion-content>
   <ion-list>
     <button ion-item *ngFor="let result of results" (click)="showResults(result)" [attr.detail-none]="result.type == 'directory' ? null: 'true'">
-      <ion-icon item-start *ngIf="result.type == 'directory'" name="folder" style="zoom: 2" color="mh-dark-blue"></ion-icon>
-      <ion-icon item-start *ngIf="result.type != 'directory'" name="musical-notes" style="zoom: 2" color="mh-dark-blue"></ion-icon>
+      <ion-icon item-start *ngIf="result.type == 'directory' && !result.album_art" name="folder" style="zoom: 2" color="mh-dark-blue"></ion-icon>
+      <ion-icon item-start *ngIf="result.type != 'directory' && !result.album_art" name="musical-notes" style="zoom: 2" color="mh-dark-blue"></ion-icon>
+      <ion-thumbnail item-start *ngIf="result.album_art">
+          <img src="{{ result.album_art }}">
+        </ion-thumbnail>
       <h2 ion-text color="mh-blue">{{ result.name }}</h2>
       <button ion-button outline item-end color="mh-blue" *ngIf="result.type != 'directory'" large (click)="showOptions(result); $event.stopPropagation();"><ion-icon name="cog"></ion-icon></button>
     </button>

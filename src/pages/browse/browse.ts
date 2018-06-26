@@ -39,6 +39,11 @@ export class BrowsePage {
         this.mopidy.library.browse(null)
           .then((refs) => {
             console.log(refs);
+            refs.push({
+              name: 'Spotify',
+              type: 'directory',
+              uri: 'spotify:directory'
+            });
             for (let ref of refs) {
               if (ref.uri.startsWith('spotify')) {
                 ref.icon = 'custom-spotify';
