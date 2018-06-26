@@ -1,10 +1,6 @@
+import { ConfigProvider } from '../../providers/config/config';
 import { Component } from '@angular/core';
-import {
-  IonicPage,
-  LoadingController,
-  NavController,
-  NavParams
-  } from 'ionic-angular';
+import { IonicPage, LoadingController, NavController } from 'ionic-angular';
 import * as Mopidy from 'mopidy';
 
 
@@ -26,9 +22,9 @@ export class BrowsePage {
   constructor(
     private navCtrl: NavController, 
     private loadCtrl: LoadingController,
-    private navParams: NavParams) {
+    confProvider: ConfigProvider) {
       this.mopidy = new Mopidy({
-        webSocketUrl: 'ws://mappina.velasuci.com:6680/mopidy/ws/'
+        webSocketUrl: confProvider.getMopidyUrl()
       });
       this.mopidy.on('state:offline', () => {
         this.mopidyOnline = false;
@@ -38,12 +34,6 @@ export class BrowsePage {
         this.mopidyOnline = true;
         this.mopidy.library.browse(null)
           .then((refs) => {
-            console.log(refs);
-            refs.push({
-              name: 'Spotify',
-              type: 'directory',
-              uri: 'spotify:directory'
-            });
             for (let ref of refs) {
               if (ref.uri.startsWith('spotify')) {
                 ref.icon = 'custom-spotify';

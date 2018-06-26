@@ -1,12 +1,8 @@
+import { ConfigProvider } from '../../providers/config/config';
 import { LastFmProvider } from '../../providers/last-fm/last-fm';
 import { getArtistName } from '../../utils/index';
 import { Component } from '@angular/core';
-import {
-  IonicPage,
-  LoadingController,
-  NavController,
-  NavParams
-  } from 'ionic-angular';
+import { IonicPage, LoadingController } from 'ionic-angular';
 import * as Mopidy from 'mopidy';
 
 
@@ -29,12 +25,11 @@ export class QueuePage {
   loadingVisible = false;
 
   constructor(
-    private navCtrl: NavController,
     private loadCtrl: LoadingController,
-    private navParams: NavParams,
-    private lastFM: LastFmProvider) {
+    private lastFM: LastFmProvider,
+    confProvider: ConfigProvider) {
     this.mopidy = new Mopidy({
-      webSocketUrl: 'ws://mappina.velasuci.com:6680/mopidy/ws/'
+      webSocketUrl: confProvider.getMopidyUrl()
     });
     // this.mopidy.on(console.log.bind(console));
     this.mopidy.on('state:offline', () => {

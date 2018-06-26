@@ -1,5 +1,5 @@
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import { ConfigProvider } from '../providers/config/config';
 import { LastFmProvider } from '../providers/last-fm/last-fm';
 import { HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -29,7 +29,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    LastFmProvider
+    LastFmProvider,
+    ConfigProvider
   ]
 })
 export class AppModule {}

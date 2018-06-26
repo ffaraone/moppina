@@ -9,6 +9,7 @@ page-now-playing {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        overflow-y: hidden;
     }
     .cover-image-box {
         display: flex;

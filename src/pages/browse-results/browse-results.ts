@@ -1,3 +1,4 @@
+import { ConfigProvider } from '../../providers/config/config';
 import { LastFmProvider } from '../../providers/last-fm/last-fm';
 import { Component } from '@angular/core';
 import {
@@ -32,9 +33,10 @@ export class BrowseResultsPage {
     private loadCtrl: LoadingController,
     private asCtrl: ActionSheetController,
     private navParams: NavParams,
-    private lastFM: LastFmProvider) {
+    private lastFM: LastFmProvider,
+    confProvider: ConfigProvider) {
       this.mopidy = new Mopidy({
-        webSocketUrl: 'ws://mappina.velasuci.com:6680/mopidy/ws/'
+        webSocketUrl: confProvider.getMopidyUrl()
       });
       this.mopidy.on('state:offline', () => {
         this.mopidyOnline = false;
@@ -62,8 +64,10 @@ export class BrowseResultsPage {
       this.results = refs;
       for (let r of refs) {
         this.mopidy.library.lookup(r.uri).then((tltracks) => {
-          if (r.uri.startsWith('spotifyweb')) {
-            console.log(tltracks);
+          if (r.uri.startsWith('spotifyweb:yourmusic:album:')) {
+            r.uri = 'spotify:album:' + r.uri.substring(27);
+          } else if (r.uri.startsWith('spotifyweb:yourmusic:artist:')) {
+            r.uri = 'spotify:artist:' + r.uri.substring(28);
           }
           this.getAlbumArt(r, tltracks);
         });
