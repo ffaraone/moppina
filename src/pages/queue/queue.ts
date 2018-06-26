@@ -75,7 +75,6 @@ export class QueuePage {
         Promise.all(promises)
         .then((tltracks) => {
           for (const tl of tltracks) {
-            console.log(tltracks);
             this.tracks.push({
               name: tl.track.name,
               album_art: tl.track.moppina_album_art,
@@ -97,8 +96,6 @@ export class QueuePage {
         for (const t of this.tracks) {
           t.current = t.tlid === data.tl_track.tlid;
         }
-        // console.log(this.tracks);
-        // this.content.resize();
       }
     });
     this.mopidy.on('event:tracklistChanged', () => {
@@ -131,7 +128,6 @@ export class QueuePage {
     })
   }
   playTrack(track) {
-    console.log('play track ' + track.tlid);
     this.mopidy.playback.play(null, track.tlid);
   }
   ionViewDidLoad() {
@@ -139,5 +135,16 @@ export class QueuePage {
       this.getTracklist();
     }    
   }
-
+  reorder(indexes) {
+    this.mopidy.tracklist.move(indexes.from, indexes.from, indexes.to)
+      .then(() => {
+        console.log('track moved');
+      });
+  }
+  clear() {
+    this.mopidy.tracklist.clear();
+  }
+  shuffle() {
+    this.mopidy.tracklist.shuffle();
+  }
 }

@@ -1,12 +1,29 @@
+<ion-header>
+    <ion-navbar style="zoom: 1.3">
+        <ion-buttons end>
+            <button ion-button icon-only (click)="shuffle()">
+                <ion-icon name="shuffle"></ion-icon>
+              </button>
+            <button ion-button icon-only (click)="clear()">
+              <ion-icon name="trash"></ion-icon>
+            </button>
+          </ion-buttons>
+    </ion-navbar>
+  </ion-header>
 <ion-content>
-  <ion-list>
-      <ion-item *ngFor="let track of tracks" (tap)="playTrack(track)">
-          <ion-thumbnail item-start>
-            <img src="{{ track.album_art }}">
-          </ion-thumbnail>
-          <h2 ion-text color="mh-blue">{{ track.name }}</h2>
-          <p ion-text color="mh-dark-blue">{{ track.artist }} - {{ track.album }}</p>
-          <ion-icon *ngIf="track.current" item-end name="play"></ion-icon>
-        </ion-item>
-  </ion-list>
+  <div *ngIf="tracks.length > 0">
+      <ion-list reorder="true" (ionItemReorder)="reorder($event)">
+          <ion-item *ngFor="let track of tracks" (tap)="playTrack(track)">
+              <ion-thumbnail item-start>
+                <img src="{{ track.album_art }}">
+              </ion-thumbnail>
+              <h2 ion-text color="mh-blue">{{ track.name }}</h2>
+              <p ion-text color="mh-dark-blue">{{ track.artist }} - {{ track.album }}</p>
+              <ion-icon *ngIf="track.current" item-end name="play"></ion-icon>
+            </ion-item>
+      </ion-list>    
+  </div>
+  <div *ngIf="tracks.length == 0" class="no-result">
+    <h1 ion-text color="mh-blue">Your queue is empty!</h1>
+  </div>
 </ion-content>
