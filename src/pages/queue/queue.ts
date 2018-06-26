@@ -67,25 +67,28 @@ export class QueuePage {
     this.tracks = [];
     this.mopidy.tracklist.getTlTracks()
     .then((tracks) => {
-      const promises: Promise<any>[] = [];
-      for (const t of tracks) {
-        promises.push(this.getAlbumArt(t));
+      this.hideLoading();
+      for (const tl of tracks) {
+        let trackData = {
+          name: tl.track.name,
+          album_art: DEFAULT_ALBUM_ART,
+          album: tl.track.album ? tl.track.album.name : '',
+          artist: getArtistName(tl.track),
+          tlid: tl.tlid,
+          current: false
+        };
+        this.tracks.push(trackData);
+        this.getAlbumArt(tl).then((tltrack) => {
+          trackData.album_art = tl.track.moppina_album_art;
+        });
+
       }
       this.mopidy.playback.getCurrentTlTrack().then((currentTrack) => {
-        Promise.all(promises)
-        .then((tltracks) => {
-          for (const tl of tltracks) {
-            this.tracks.push({
-              name: tl.track.name,
-              album_art: tl.track.moppina_album_art,
-              album: tl.track.album ? tl.track.album.name : '',
-              artist: getArtistName(tl.track),
-              tlid: tl.tlid,
-              current: currentTrack.tlid === tl.tlid
-            });
+        if (currentTrack) {
+          for (const tl of this.tracks) {
+            tl.current = currentTrack.tlid === tl.tlid
           }
-          this.hideLoading();
-        });
+        }
       });
     });
   }
