@@ -75,7 +75,7 @@ export class NowPlayingPage {
         }
         this.trackLength = track.length;
         this.trackName = track.name;
-        this.trackAlbum = track.album.name;
+        this.trackAlbum = track.album ? track.album.name : '';
         this.trackArtist = getArtistName(track);
         this.trackCodec = getTrackCodec(track.uri);
         this.trackBitrate = track.bitrate/1000 + ' kbit/s';
@@ -95,7 +95,7 @@ export class NowPlayingPage {
   showLoading() {
     if (!this.loadingVisible) {
       this.loadingVisible = true;
-      this.loading = this.loadCtrl.create({ content: 'Waiting for Mopidy to became online...'});
+      this.loading = this.loadCtrl.create({ content: 'Waiting for Mopidy to go online...'});
       this.loading.present();
     }
   }
@@ -121,9 +121,10 @@ export class NowPlayingPage {
 
   getAlbumArt(track) {
     this.mopidy.library.getImages([track.uri]).then((imageResults) => {
+      console.log(imageResults);
       for (const uri in imageResults) {
         if (imageResults[uri].length > 0) {
-          console.log(imageResults[uri]);
+          this.albumArt = imageResults[uri][0]['uri'];
           return;
         }
       }
@@ -155,7 +156,7 @@ export class NowPlayingPage {
         const track = data.tl_track.track;
         this.trackLength = track.length;
         this.trackName = track.name;
-        this.trackAlbum = track.album.name;
+        this.trackAlbum = track.album ? track.album.name: '';
         this.trackArtist = getArtistName(track);
         this.trackCodec = getTrackCodec(track.uri);
         this.trackBitrate = track.bitrate/1000 + ' kbit/s';

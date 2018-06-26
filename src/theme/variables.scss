@@ -84,6 +84,19 @@ $range-ios-bar-background-color: map-get($colors, mh-dark-blue);
 $tabs-ios-tab-color-inactive: map-get($colors, mh-dark-green);
 $tabs-ios-tab-color-active: map-get($colors, mh-green);
 
+$list-ios-activated-background-color: #000;
+$item-ios-detail-push-color: map-get($colors, mh-blue);
+
+$toolbar-ios-button-color: map-get($colors, mh-green);
+$toolbar-ios-title-text-color: map-get($colors, mh-green);
+
+$action-sheet-ios-background: #242424;
+$action-sheet-ios-button-cancel-background: #242424;
+$action-sheet-ios-border-color: #000;
+$action-sheet-ios-title-color: map-get($colors, mh-green);
+$action-sheet-ios-title-font-size: 1.6rem;
+$action-sheet-ios-button-text-color: map-get($colors, mh-blue);
+
 // Ionicons
 // --------------------------------------------------
 // The premium icon font for Ionic. For more info, please see:

@@ -1,8 +1,7 @@
 import { LastFmProvider } from '../../providers/last-fm/last-fm';
 import { getArtistName } from '../../utils/index';
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import {
-  Content,
   IonicPage,
   LoadingController,
   NavController,
@@ -12,12 +11,6 @@ import * as Mopidy from 'mopidy';
 
 
 const DEFAULT_ALBUM_ART = 'assets/imgs/default.png';
-/**
- * Generated class for the QueuePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -26,8 +19,6 @@ const DEFAULT_ALBUM_ART = 'assets/imgs/default.png';
 })
 export class QueuePage {
 
-
-  @ViewChild(Content) content: Content;
 
 
 
@@ -78,18 +69,17 @@ export class QueuePage {
     .then((tracks) => {
       const promises: Promise<any>[] = [];
       for (const t of tracks) {
-        if (t.track.album && t.track.album.name) {
-          promises.push(this.getAlbumArt(t));
-        }
+        promises.push(this.getAlbumArt(t));
       }
       this.mopidy.playback.getCurrentTlTrack().then((currentTrack) => {
         Promise.all(promises)
         .then((tltracks) => {
           for (const tl of tltracks) {
+            console.log(tltracks);
             this.tracks.push({
               name: tl.track.name,
               album_art: tl.track.moppina_album_art,
-              album: tl.track.album.name,
+              album: tl.track.album ? tl.track.album.name : '',
               artist: getArtistName(tl.track),
               tlid: tl.tlid,
               current: currentTrack.tlid === tl.tlid
@@ -111,6 +101,9 @@ export class QueuePage {
         // this.content.resize();
       }
     });
+    this.mopidy.on('event:tracklistChanged', () => {
+      this.getTracklist();
+    });
   }
   
   getAlbumArt(tltrack): Promise<any> {
@@ -118,8 +111,7 @@ export class QueuePage {
       this.mopidy.library.getImages([tltrack.track.uri]).then((imageResults) => {
         for (const uri in imageResults) {
           if (imageResults[uri].length > 0) {
-            console.log(imageResults[uri]);
-            tltrack.track.moppina_album_art = DEFAULT_ALBUM_ART;
+            tltrack.track.moppina_album_art = imageResults[uri][0]['uri'];
             resolve(tltrack)
             return;
           }
@@ -130,9 +122,10 @@ export class QueuePage {
             resolve(tltrack);
           })
           .catch((err) => {
+            console.log(err);
             tltrack.track.moppina_album_art = DEFAULT_ALBUM_ART;
             resolve(tltrack);
-            console.log(err);
+            
           });
       });
     })

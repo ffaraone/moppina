@@ -27,7 +27,10 @@ export class LastFmProvider {
   getAlbumArt(track: any): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       const artist = getArtistName(track);
-      const album = track.album.name;
+      const album = track.album ? track.album.name : '';
+      if (!artist || !album) {
+        reject('not enough data');
+      }
       const key: string = Md5.hashStr(artist + album) as string;
       this.storage.get(key)
         .then((val) => {

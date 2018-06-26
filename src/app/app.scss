@@ -14,3 +14,33 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+ion-icon {
+    &[class*="custom-"] {
+      mask-size: contain;
+      mask-position: 50% 50%;
+      mask-repeat: no-repeat;
+      background: currentColor;
+      width: 1em;
+      height: 1em;
+    }
+  
+    &[class*="custom-spotify"] {
+      mask-image: url(../assets/icon/spotify.svg);
+    }  
+    &[class*="custom-tunein"] {
+      mask-image: url(../assets/icon/tunein.svg);
+    }
+    &[class*="custom-podcast"] {
+      mask-image: url(../assets/icon/podcast.svg);
+    } 
+    &[class*="custom-itunes"] {
+      mask-image: url(../assets/icon/itunes.svg);
+    } 
+    &[class*="custom-file-audio"] {
+      mask-image: url(../assets/icon/file-audio.svg);
+    } 
+  }
+
+  ion-tabs > div.tabbar.show-tabbar {
+    zoom: 1.3;
+} 
