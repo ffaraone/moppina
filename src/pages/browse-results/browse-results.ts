@@ -56,9 +56,9 @@ export class BrowseResultsPage {
   }
   browseUri() {
     const ref = this.navParams.get('ref');
-    console.log(ref.uri);
     this.showLoading();
     this.mopidy.library.browse(ref.uri).then((refs) => {
+      console.log(refs);
       this.hideLoading();
       this.title = ref.name;
       this.results = refs;
@@ -68,8 +68,18 @@ export class BrowseResultsPage {
             r.uri = 'spotify:album:' + r.uri.substring(27);
           } else if (r.uri.startsWith('spotifyweb:yourmusic:artist:')) {
             r.uri = 'spotify:artist:' + r.uri.substring(28);
+          } else if (r.uri.startsWith('spotifyweb:sauce:artist:')) {
+            r.uri = 'spotify:artist:' + r.uri.substring(24);
+          } else if (r.uri.startsWith('spotifyweb:sauce:album:')) {
+            r.uri = 'spotify:album:' + r.uri.substring(23);
           }
-          this.getAlbumArt(r, tltracks);
+          if (!r.uri.startsWith('local:artist:')) {
+            this.getAlbumArt(r, tltracks);
+          } else {
+            this.lastFM.getArtistPicture(r.name).then((pic) => {
+              r.album_art = pic;
+            });
+          }
         });
       }
     });

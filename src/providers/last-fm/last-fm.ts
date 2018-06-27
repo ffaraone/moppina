@@ -24,6 +24,44 @@ export class LastFmProvider {
     private storage: Storage) {
   }
 
+  getArtistPicture(artist:string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      const key: string = Md5.hashAsciiStr(artist) as string;
+      this.storage.get(key)
+        .then((val) => {
+          if (val) {
+            resolve(val);
+            return;
+          }
+          let params: HttpParams = new HttpParams();
+          params = params.set('api_key', API_KEY);
+          params = params.set('method', 'artist.getinfo');
+          params = params.set('format', 'json');
+          params = params.set('artist', artist);
+          this.http.get('http://ws.audioscrobbler.com/2.0/', {
+            params: params
+          }).subscribe(
+            (data: any) => {
+              console.log(JSON.stringify(data, null, 4));
+              if (data.artist && data.artist.image) {
+                for (const img of data.artist.image) {
+                  if (img.size === 'extralarge' || img.size === 'mega' || img.size === '') {
+                    const imgUrl = img['#text'];
+                    this.storage.set(key, imgUrl);
+                    resolve(imgUrl);
+                  }
+                }
+              }
+              reject('no image found');
+            },
+            (err) => {
+              reject(err);
+            }
+          );
+        });
+    });
+  }
+
   getAlbumArt(track: any): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       const artist = getArtistName(track);
