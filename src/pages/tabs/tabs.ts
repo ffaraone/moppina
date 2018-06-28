@@ -1,18 +1,16 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { MopidyPlaybackState } from '../../models/mopidy';
+import { Component, ViewChild } from '@angular/core';
+import { LoadingController } from 'ionic-angular';
+import { Events, IonicPage, Tabs } from 'ionic-angular';
 
-/**
- * Generated class for the TabsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
   templateUrl: 'tabs.html',
 })
 export class TabsPage {
+
+  @ViewChild('myTabs') tabRef: Tabs;
 
   tabBrowse = 'BrowsePage';
   tabNowPlaying = 'NowPlayingPage';
@@ -23,11 +21,42 @@ export class TabsPage {
   tabNowPlayingTitle = 'Now Playing';
   tabQueueTitle = 'Queue'
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  loadingVisible: boolean = false;
+  loading: any;
 
+  constructor(
+    private loadingCtrl: LoadingController,
+    private events: Events) {
+      this.configureEvents();
+  }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TabsPage');
+    this.tabRef.select(2);
   }
+  private configureEvents() {
+    this.events.subscribe('mopidy:playback:stateChanged', (stateInfo) => {
+      if (stateInfo.new_state === MopidyPlaybackState.Playing) {
+        if (this.tabRef.selectedIndex != 2) {
+          this.tabRef.select(2);
+        }
+      }
+    });
+    this.events.subscribe('mopidy:connection:offline', () => this.showLoading());
+    this.events.subscribe('mopidy:connection:online', () => this.hideLoading());
+    this.events.subscribe('mopidy:async:loading', () => this.showLoading())
+    this.events.subscribe('mopidy:async:loaded', () => this.hideLoading())
 
+  }
+  private showLoading() {
+    if (!this.loadingVisible) {
+      this.loadingVisible = true;
+      this.loading = this.loadingCtrl.create({ content: 'Be patient please...'});
+      this.loading.present();
+    }
+  }
+  private hideLoading() {
+    if (this.loadingVisible) {
+      this.loadingVisible = false;
+      this.loading.dismiss();
+    }
+  }
 }

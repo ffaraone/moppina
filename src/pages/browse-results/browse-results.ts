@@ -85,17 +85,17 @@ export class BrowseResultsPage {
     });
   }
   showLoading() {
-    if (!this.loadingVisible) {
-      this.loadingVisible = true;
-      this.loading = this.loadCtrl.create({ content: 'Loading...'});
-      this.loading.present();
-    }
+    // if (!this.loadingVisible) {
+    //   this.loadingVisible = true;
+    //   this.loading = this.loadCtrl.create({ content: 'Loading...'});
+    //   this.loading.present();
+    // }
   }
   hideLoading() {
-    if (this.loadingVisible) {
-      this.loadingVisible = false;
-      this.loading.dismiss();
-    }
+    // if (this.loadingVisible) {
+    //   this.loadingVisible = false;
+    //   this.loading.dismiss();
+    // }
   }
   showOptions(ref) {
     let actionSheet = this.asCtrl.create({

@@ -8,6 +8,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { MopidyProvider } from '../providers/mopidy/mopidy';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LastFmProvider,
-    ConfigProvider
+    ConfigProvider,
+    MopidyProvider
   ]
 })
 export class AppModule {}

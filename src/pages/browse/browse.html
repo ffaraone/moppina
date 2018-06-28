@@ -5,9 +5,9 @@
 </ion-header>
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let provider of providers" (click)="showResults(provider)">
-      <ion-icon item-start [name]="provider.icon" style="zoom: 2" color="mh-dark-blue"></ion-icon>
-      <h1 ion-text color="mh-blue">{{ provider.name }}</h1>
+    <button ion-item *ngFor="let backend of mp.browseState.backends" (click)="browse(backend)">
+      <ion-icon item-start [name]="backend.icon" style="zoom: 2" color="mh-dark-blue"></ion-icon>
+      <h1 ion-text color="mh-blue">{{ backend.name }}</h1>
     </button>
   </ion-list>
 </ion-content>
