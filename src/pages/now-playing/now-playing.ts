@@ -1,18 +1,8 @@
-import { LastFmProvider } from '../../providers/last-fm/last-fm';
 import { MopidyProvider } from '../../providers/mopidy/mopidy';
-import { getArtistName, getTrackCodec } from '../../utils/index';
 import { Component } from '@angular/core';
-import {
-  IonicPage,
-  LoadingController,
-  NavController,
-  NavParams
-  } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import { Events } from 'ionic-angular';
-import * as Mopidy from 'mopidy';
 
-
-const DEFAULT_ALBUM_ART = 'assets/imgs/default.png';
 
 @IonicPage()
 @Component({

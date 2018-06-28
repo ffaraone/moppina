@@ -1,0 +1,6 @@
+sudo apt-get install mopidy mopidy-spotify xserver-xorg xinit \
+    x11-xserver-utils xserver-xorg-video-fbdev mesa-va-drivers mesa-vdpau-drivers \
+    libgtk-3-0 libxss1 libgconf-2-4 python-pip libgconf-2-4 libnss3
+
+sudo pip install Mopidy-Local-SQLite Mopidy-Spotify-Web Mopidy-TuneIn
+
