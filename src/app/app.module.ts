@@ -1,6 +1,6 @@
 import { MyApp } from './app.component';
-import { ConfigProvider } from '../providers/config/config';
 import { LastFmProvider } from '../providers/last-fm/last-fm';
+import { MopidyProvider } from '../providers/mopidy/mopidy';
 import { HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,7 +8,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { MopidyProvider } from '../providers/mopidy/mopidy';
 
 
 @NgModule({
@@ -31,7 +30,6 @@ import { MopidyProvider } from '../providers/mopidy/mopidy';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LastFmProvider,
-    ConfigProvider,
     MopidyProvider
   ]
 })

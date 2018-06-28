@@ -16,6 +16,7 @@ export class BrowsePage {
   }
 
   browse(backend) {
+    this.mp.browseState.breadcrumb.push(backend.name);
     this.navCtrl.push('BrowseResultsPage', {ref: backend});
   }
 }

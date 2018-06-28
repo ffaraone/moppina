@@ -140,7 +140,7 @@ export class MopidyProvider {
   private getNowPlayingAlbumArt(track) {
     this.getAlbumArt(track).then(url => this.state.albumArt = url);
   }
-  private getAlbumArt(track): Promise<string> {
+  public getAlbumArt(track): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       this.mopidy.library.getImages([track.uri]).then((imageResults) => {
         for (const uri in imageResults) {
@@ -154,6 +154,9 @@ export class MopidyProvider {
           .catch(() => resolve(DEFAULT_ALBUM_ART));
       });
     });
+  }
+  public getArtistPicture(artist): Promise<string> {
+    return this.lastFM.getArtistPicture(artist);
   }
   playPause() {
     if (this.state.playbackState === MopidyPlaybackState.Playing) {
@@ -222,4 +225,26 @@ export class MopidyProvider {
   shuffleQueue() {
     this.mopidy.tracklist.shuffle();
   }
+  browse(uri): Promise<any[]> {
+    return this.mopidy.library.browse(uri);
+  }
+  appendQueue(uri) {
+    this.mopidy.tracklist.add(null, null, uri);
+  }
+  clearAndPlayQueue(uri) {
+    this.mopidy.tracklist.clear().then(() => {
+      this.mopidy.tracklist.add(null, null, uri).then(() => {
+        this.mopidy.playback.play(null, 0);
+      })
+    });
+  }
+  appendAndPlay(uri) {
+    this.mopidy.tracklist.add(null, null, uri).then((tltracks) => {
+      this.mopidy.playback.play(null, tltracks[0].tlid);
+    });
+  }
+  lookup(uri): Promise<any[]> {
+    return this.mopidy.library.lookup(uri);
+  }
+
 }

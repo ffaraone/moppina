@@ -42,7 +42,6 @@ export class LastFmProvider {
             params: params
           }).subscribe(
             (data: any) => {
-              console.log(JSON.stringify(data, null, 4));
               if (data.artist && data.artist.image) {
                 for (const img of data.artist.image) {
                   if (img.size === 'extralarge' || img.size === 'mega' || img.size === '') {

@@ -1,14 +1,11 @@
-import { ConfigProvider } from '../../providers/config/config';
-import { LastFmProvider } from '../../providers/last-fm/last-fm';
+import { MopidyProvider } from '../../providers/mopidy/mopidy';
 import { Component } from '@angular/core';
 import {
   ActionSheetController,
   IonicPage,
-  LoadingController,
   NavController,
   NavParams
   } from 'ionic-angular';
-import * as Mopidy from 'mopidy';
 
 
 @IonicPage()
@@ -18,85 +15,69 @@ import * as Mopidy from 'mopidy';
 })
 export class BrowseResultsPage {
 
-
-  title: string = '';
-
-  mopidy: Mopidy;
-  mopidyOnline: boolean = false;
-  loading: any;
-  loadingVisible = false;
-
-  results: any[] = [];
+  refs: any[] = [];
+  currentRef: any;
 
   constructor(
     private navCtrl: NavController, 
-    private loadCtrl: LoadingController,
     private asCtrl: ActionSheetController,
     private navParams: NavParams,
-    private lastFM: LastFmProvider,
-    confProvider: ConfigProvider) {
-      this.mopidy = new Mopidy({
-        webSocketUrl: confProvider.getMopidyUrl()
-      });
-      this.mopidy.on('state:offline', () => {
-        this.mopidyOnline = false;
-        this.showLoading();
-      });
-      this.mopidy.on('state:online', () => {
-        this.mopidyOnline = true;
-        this.hideLoading();
-        this.browseUri();
-      });
+    public mp: MopidyProvider) {
   }
 
   ionViewDidLoad() {
-    if (this.mopidyOnline) {
-      this.browseUri();
-    }
+    this.currentRef = this.navParams.get('ref');
+    this.browseUri();
+
   }
-  browseUri() {
-    const ref = this.navParams.get('ref');
-    this.showLoading();
-    this.mopidy.library.browse(ref.uri).then((refs) => {
-      console.log(refs);
-      this.hideLoading();
-      this.title = ref.name;
-      this.results = refs;
-      for (let r of refs) {
-        this.mopidy.library.lookup(r.uri).then((tltracks) => {
-          if (r.uri.startsWith('spotifyweb:yourmusic:album:')) {
-            r.uri = 'spotify:album:' + r.uri.substring(27);
-          } else if (r.uri.startsWith('spotifyweb:yourmusic:artist:')) {
-            r.uri = 'spotify:artist:' + r.uri.substring(28);
-          } else if (r.uri.startsWith('spotifyweb:sauce:artist:')) {
-            r.uri = 'spotify:artist:' + r.uri.substring(24);
-          } else if (r.uri.startsWith('spotifyweb:sauce:album:')) {
-            r.uri = 'spotify:album:' + r.uri.substring(23);
-          }
-          if (!r.uri.startsWith('local:artist:')) {
-            this.getAlbumArt(r, tltracks);
-          } else {
-            this.lastFM.getArtistPicture(r.name).then((pic) => {
-              r.album_art = pic;
-            });
+
+      //     this.mopidy.library.lookup(r.uri).then((tracks) => {
+    //       if (r.uri.startsWith('spotifyweb:yourmusic:album:')) {
+    //         r.uri = 'spotify:album:' + r.uri.substring(27);
+    //       } else if (r.uri.startsWith('spotifyweb:yourmusic:artist:')) {
+    //         r.uri = 'spotify:artist:' + r.uri.substring(28);
+    //       } else if (r.uri.startsWith('spotifyweb:sauce:artist:')) {
+    //         r.uri = 'spotify:artist:' + r.uri.substring(24);
+    //       } else if (r.uri.startsWith('spotifyweb:sauce:album:')) {
+    //         r.uri = 'spotify:album:' + r.uri.substring(23);
+    //       }
+    //       if (!r.uri.startsWith('local:artist:')) {
+    //         this.mp.getAlbumArt(
+    //       } else {
+    //         this.lastFM.getArtistPicture(r.name).then((pic) => {
+    //           r.album_art = pic;
+    //         });
+    //       }
+    //     });
+    //   }
+    // });
+
+  private getArts(): Promise<null> {
+    return new Promise<null>((resolve, reject) => {
+      for (const r of this.refs) {
+        this.mp.lookup(r.uri).then(tracks => {
+          if (tracks && tracks.length > 0) {
+            if (!r.uri.startsWith('local:artist:')) {
+              this.mp.getAlbumArt(tracks[0]).then(url => {
+                r.albumArt = url;
+              });
+            } else {
+              this.mp.getArtistPicture(r.name).then(url => {
+                r.albumArt = url;
+              });
+            }
           }
         });
       }
     });
   }
-  showLoading() {
-    // if (!this.loadingVisible) {
-    //   this.loadingVisible = true;
-    //   this.loading = this.loadCtrl.create({ content: 'Loading...'});
-    //   this.loading.present();
-    // }
+  browseUri() {
+    this.mp.browse(this.currentRef.uri).then(refs => {
+      this.refs = refs;
+      this.getArts();
+    });
   }
-  hideLoading() {
-    // if (this.loadingVisible) {
-    //   this.loadingVisible = false;
-    //   this.loading.dismiss();
-    // }
-  }
+
   showOptions(ref) {
     let actionSheet = this.asCtrl.create({
       title: 'What you want to do ?',
@@ -104,20 +85,13 @@ export class BrowseResultsPage {
         {
           text: 'Add to queue',
           handler: () => {
-            this.mopidy.tracklist.add(null, null, ref.uri).then((tl_track) => {
-            });
+            this.mp.appendQueue(ref.uri);
           }
         },
         {
           text: 'Clear queue and play',
           handler: () => {
-            this.mopidy.tracklist.clear()
-              .then(() => {
-                this.mopidy.tracklist.add(null, null, ref.uri).then((tl_track) => {
-                  console.log(tl_track);
-                  this.mopidy.playback.play(null, tl_track.tlid);
-                });
-              });
+            this.mp.clearAndPlayQueue(ref.uri);
           }
         },
         {
@@ -131,41 +105,16 @@ export class BrowseResultsPage {
     });
     actionSheet.present();    
   }
-  showResults(ref) {
+  browseOrPlay(ref) {
     if (ref.type === 'directory' || ref.type === 'album' || ref.type === 'artist') {
+      this.mp.browseState.breadcrumb.push(ref.name);
       this.navCtrl.push('BrowseResultsPage', {ref: ref});
     } else {
-      this.mopidy.tracklist.add(null, null, ref.uri).then((tl_track) => {
-        this.mopidy.playback.play(null, tl_track.tlid);
-      });
+      this.mp.appendAndPlay(ref.uri);
     } 
   }
-  getAlbumArt(ref, tltracks): Promise<any> {
-    console.log('get album art for uri ' + ref.uri);
-    return new Promise<any>((resolve, reject) => {
-      this.mopidy.library.getImages([ref.uri]).then((imageResults) => {
-        for (const uri in imageResults) {
-          if (imageResults[uri].length > 0) {
-            ref.album_art = imageResults[uri][0]['uri'];
-            resolve()
-            return;
-          }
-        }
-        if (tltracks && tltracks instanceof Array && tltracks.length > 0) {
-          console.log('lookup lastfm for album art');
-          this.lastFM.getAlbumArt(tltracks[0])
-          .then(res => {
-            ref.album_art = res;
-            resolve();
-          })
-          .catch((err) => {
-            console.log(err);
-            resolve();   
-          });
-        } else {
-          resolve();
-        }
-      });
-    })
+  back() {
+    this.mp.browseState.breadcrumb.pop();
+    this.navCtrl.pop();
   }
 }
