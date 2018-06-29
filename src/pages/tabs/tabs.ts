@@ -15,7 +15,7 @@ export class TabsPage {
   tabBrowse = 'BrowsePage';
   tabNowPlaying = 'NowPlayingPage';
   tabQueue = 'QueuePage';
-  tabSearch = 'QueuePage';
+  tabSearch = 'SearchPage';
   tabSettings = 'QueuePage';
   tabBrowseTitle = 'Browse';
   tabNowPlayingTitle = 'Now Playing';

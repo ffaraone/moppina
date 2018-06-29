@@ -246,5 +246,8 @@ export class MopidyProvider {
   lookup(uri): Promise<any[]> {
     return this.mopidy.library.lookup(uri);
   }
-
+  search(query) {
+    console.log(this.mopidy.audio);
+    return this.mopidy.library.search({'albumartist': [query]}, ['local:'], true)
+  }
 }
