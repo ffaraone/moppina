@@ -7,24 +7,26 @@ const {app} = require('electron');
 
 var window = null;
 
-const WINDOW_WIDTH = 800;
-const WINDOW_HEIGHT = 480;
-
 
 app.on('ready', function() {
+
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
   
   window = new BrowserWindow({
-    width: WINDOW_WIDTH,
-    height: WINDOW_HEIGHT,
+    width: width,
+    height: height,
     resizable: false,
     frame: false,
     transparent: false,
-    show: true
+    show: true,
+    kiosk: true
   });
 
-  const appPath = path.join(__dirname, 'www', 'index.html');
+  // const appPath = path.join(__dirname, 'www', 'index.html');
 
-  window.loadURL('file://' + appPath);
+  // window.loadURL('file://' + appPath);
+
+  window.loadURL('http://localhost:8100');
 
   window.on('close', function () {
     window = null;
