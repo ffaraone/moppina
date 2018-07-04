@@ -4,9 +4,10 @@ sudo wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/stret
 sudo apt-get update
 
 
-sudo apt-get install --no-install-recommends mopidy mopidy-spotify xserver-xorg xinit \
+sudo apt-get install --no-install-suggests --no-install-recommends mopidy mopidy-spotify xserver-xorg xinit \
     x11-xserver-utils xserver-xorg-video-fbdev mesa-va-drivers mesa-vdpau-drivers \
-    libgtk-3-0 libxss1 libgconf-2-4 python-pip libgconf-2-4 libnss3 python-setuptools
+    libgtk-3-0 libxss1 libgconf-2-4 python-pip libgconf-2-4 libnss3 python-setuptools \
+    libgl1-mesa-dri gstreamer1.0-alsa alsa-base alsa-utils alsa-firmware-loaders 
 
 sudo pip install Mopidy-Local-SQLite Mopidy-Spotify-Web Mopidy-TuneIn
 

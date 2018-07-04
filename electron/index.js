@@ -22,11 +22,11 @@ app.on('ready', function() {
     kiosk: true
   });
 
-  // const appPath = path.join(__dirname, 'www', 'index.html');
+  const appPath = path.join(__dirname, 'www', 'index.html');
 
-  // window.loadURL('file://' + appPath);
+  window.loadURL('file://' + appPath);
 
-  window.loadURL('http://localhost:8100');
+  //window.loadURL('http://localhost:8100');
 
   window.on('close', function () {
     window = null;
