@@ -6,11 +6,11 @@ import {
   } from '../../models/mopidy';
 import { MopidyBrowseState } from '../../models/mopidy';
 import { LastFmProvider } from '../last-fm/last-fm';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Env } from '@app/env';
 import { Events } from 'ionic-angular';
 import * as Mopidy from 'mopidy';
-
 
 
 @Injectable()
@@ -24,7 +24,7 @@ export class MopidyProvider {
   private updater: any;
 
 
-  constructor(private events: Events, private lastFM: LastFmProvider) {
+  constructor(private http: HttpClient, private events: Events, private lastFM: LastFmProvider) {
     this.mopidy = new Mopidy({
       webSocketUrl: Env.mopidyWsUrl
     });
@@ -155,6 +155,11 @@ export class MopidyProvider {
       });
     });
   }
+
+  public getAlbumArts(uris): Promise<any> {
+    return this.http.post('http://mophile.velasuci.com:6680/moppina/api/', uris).toPromise();
+  }
+
   public getArtistPicture(artist): Promise<string> {
     return this.lastFM.getArtistPicture(artist);
   }

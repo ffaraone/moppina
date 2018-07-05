@@ -1,7 +1,8 @@
 import { MopidyProvider } from '../../providers/mopidy/mopidy';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   ActionSheetController,
+  Content,
   IonicPage,
   NavController,
   NavParams
@@ -14,6 +15,8 @@ import {
   templateUrl: 'browse-results.html',
 })
 export class BrowseResultsPage {
+
+  @ViewChild(Content) content: Content;
 
   refs: any[] = [];
   currentRef: any;
@@ -31,54 +34,64 @@ export class BrowseResultsPage {
 
   }
 
-      //     this.mopidy.library.lookup(r.uri).then((tracks) => {
-    //       if (r.uri.startsWith('spotifyweb:yourmusic:album:')) {
-    //         r.uri = 'spotify:album:' + r.uri.substring(27);
-    //       } else if (r.uri.startsWith('spotifyweb:yourmusic:artist:')) {
-    //         r.uri = 'spotify:artist:' + r.uri.substring(28);
-    //       } else if (r.uri.startsWith('spotifyweb:sauce:artist:')) {
-    //         r.uri = 'spotify:artist:' + r.uri.substring(24);
-    //       } else if (r.uri.startsWith('spotifyweb:sauce:album:')) {
-    //         r.uri = 'spotify:album:' + r.uri.substring(23);
-    //       }
-    //       if (!r.uri.startsWith('local:artist:')) {
-    //         this.mp.getAlbumArt(
-    //       } else {
-    //         this.lastFM.getArtistPicture(r.name).then((pic) => {
-    //           r.album_art = pic;
-    //         });
-    //       }
-    //     });
-    //   }
-    // });
+  private fixSpotifyWebUris(uri) {
+    if (!uri.startsWith('spotifyweb')) {
+      return uri;
+    }
+    const pieces = uri.split(':');
+    if (pieces.length >=2) {
+      const res = ['spotify'];
+      res.push(...pieces.splice(pieces.length - 2));
+      return res.join(':');
+    }
+    return uri;
+  }
 
   private getArts(): Promise<null> {
     return new Promise<null>((resolve, reject) => {
-      for (const r of this.refs) {
-        this.mp.lookup(r.uri).then(tracks => {
-          if (r.uri.startsWith('spotifyweb:yourmusic:album:')) {
-            r.uri = 'spotify:album:' + r.uri.substring(27);
-          } else if (r.uri.startsWith('spotifyweb:yourmusic:artist:')) {
-            r.uri = 'spotify:artist:' + r.uri.substring(28);
-          } else if (r.uri.startsWith('spotifyweb:sauce:artist:')) {
-            r.uri = 'spotify:artist:' + r.uri.substring(24);
-          } else if (r.uri.startsWith('spotifyweb:sauce:album:')) {
-            r.uri = 'spotify:album:' + r.uri.substring(23);
+      this.mp.getAlbumArts(this.refs.map(val => val.uri)).then(images => {
+        console.log(images);
+        for (let r of this.refs) {
+          const sanitizedUri = this.fixSpotifyWebUris(r.uri);
+          console.log(sanitizedUri);
+          if (sanitizedUri in images && images[sanitizedUri].length > 0) {
+            console.log(images[sanitizedUri][0].uri);
+            r.albumArt = images[sanitizedUri][0].uri;
           }
-          const myRef = tracks && tracks.length > 0 ? tracks[0] : r;
-          if (!r.uri.startsWith('local:artist:')) {
-            this.mp.getAlbumArt(myRef).then(url => {
-              r.albumArt = url;
-            });
-          } else {
-            this.mp.getArtistPicture(r.name).then(url => {
-              r.albumArt = url;
-            });
-          }
-        });
-      }
+        }
+        this.content.resize();
+      });
     });
   }
+
+
+  // private getArts(): Promise<null> {
+  //   return new Promise<null>((resolve, reject) => {
+  //     for (const r of this.refs) {
+  //       this.mp.lookup(r.uri).then(tracks => {
+  //         if (r.uri.startsWith('spotifyweb:yourmusic:album:')) {
+  //           r.uri = 'spotify:album:' + r.uri.substring(27);
+  //         } else if (r.uri.startsWith('spotifyweb:yourmusic:artist:')) {
+  //           r.uri = 'spotify:artist:' + r.uri.substring(28);
+  //         } else if (r.uri.startsWith('spotifyweb:sauce:artist:')) {
+  //           r.uri = 'spotify:artist:' + r.uri.substring(24);
+  //         } else if (r.uri.startsWith('spotifyweb:sauce:album:')) {
+  //           r.uri = 'spotify:album:' + r.uri.substring(23);
+  //         }
+  //         const myRef = tracks && tracks.length > 0 ? tracks[0] : r;
+  //         if (!r.uri.startsWith('local:artist:')) {
+  //           this.mp.getAlbumArt(myRef).then(url => {
+  //             r.albumArt = url;
+  //           });
+  //         } else {
+  //           this.mp.getArtistPicture(r.name).then(url => {
+  //             r.albumArt = url;
+  //           });
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
   browseUri() {
     this.mp.browse(this.currentRef.uri).then(refs => {
       this.refs = refs;
