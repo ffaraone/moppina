@@ -24,7 +24,9 @@ app.on('ready', function() {
 
   const appPath = path.join(__dirname, 'www', 'index.html');
 
-  window.loadURL('file://' + appPath);
+  // window.loadURL('file://' + appPath);
+
+  window.loadURL('http://earth.velasuci.com:8100');
 
   //window.loadURL('http://localhost:8100');
 
