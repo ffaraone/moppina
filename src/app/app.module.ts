@@ -1,5 +1,4 @@
 import { MyApp } from './app.component';
-import { LastFmProvider } from '../providers/last-fm/last-fm';
 import { MopidyProvider } from '../providers/mopidy/mopidy';
 import { HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -29,7 +28,6 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    LastFmProvider,
     MopidyProvider
   ]
 })

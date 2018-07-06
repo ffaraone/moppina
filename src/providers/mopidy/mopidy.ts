@@ -5,10 +5,10 @@ import {
   MopidyState
   } from '../../models/mopidy';
 import { MopidyBrowseState } from '../../models/mopidy';
-import { LastFmProvider } from '../last-fm/last-fm';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Env } from '@app/env';
+import { Storage } from '@ionic/storage';
 import { Events } from 'ionic-angular';
 import * as Mopidy from 'mopidy';
 
@@ -24,7 +24,10 @@ export class MopidyProvider {
   private updater: any;
 
 
-  constructor(private http: HttpClient, private events: Events, private lastFM: LastFmProvider) {
+  constructor(
+    private http: HttpClient, 
+    private events: Events, 
+    private storage: Storage) {
     this.mopidy = new Mopidy({
       webSocketUrl: Env.mopidyWsUrl
     });
@@ -138,33 +141,54 @@ export class MopidyProvider {
     }
   }
   private getNowPlayingAlbumArt(track) {
-    this.getAlbumArt(track).then(url => this.state.albumArt = url);
-  }
-  public getAlbumArt(track): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      this.mopidy.library.getImages([track.uri]).then((imageResults) => {
-        for (const uri in imageResults) {
-          if (imageResults[uri].length > 0) {
-            resolve(imageResults[uri][0]['uri']);
-            return;
-          }
+    this.getAlbumArts([track.uri]).then(
+      images => {
+        if (track.uri in images) {
+          this.state.albumArt = images[track.uri][0].uri;
         }
-        this.lastFM.getAlbumArt(track)
-          .then(res => resolve(res))
-          .catch(() => resolve(DEFAULT_ALBUM_ART));
       });
+     
+  }
+
+  public getAlbumArts(uris): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+
+      const toLookup = [];
+      const fromCache = {};
+      const promises = [];
+
+      // get from local cache
+      for (const uri of uris) {
+        promises.push(new Promise<any>((resolve1, reject1) => {
+          this.storage.get(uri)
+            .then(val => {
+              if (val) {
+                console.log('found image data in cache for uri ' + uri);
+                fromCache[uri] = val;
+              } else {
+                toLookup.push(uri);
+              }
+              resolve1();
+            });
+        }));
+      }
+      Promise.all(promises)
+        .then(() => {
+          this.http.post('http://mophile.velasuci.com:6680/moppina/api/', toLookup)
+            .subscribe(
+            images => {
+              for (const uri in images) {
+                this.storage.set(uri, images[uri]);
+              }
+              resolve(Object.assign(fromCache, images));
+            },
+            err => {
+              console.log(err);
+              reject(err);
+            }
+          );
+        });
     });
-  }
-
-  public getAlbumArts(parent, uris): Promise<any> {
-    return this.http.post('http://mophile.velasuci.com:6680/moppina/api/', {
-      parent: parent,
-      uris: uris
-    }).toPromise();
-  }
-
-  public getArtistPicture(artist): Promise<string> {
-    return this.lastFM.getArtistPicture(artist);
   }
   playPause() {
     if (this.state.playbackState === MopidyPlaybackState.Playing) {
@@ -209,16 +233,18 @@ export class MopidyProvider {
 
   private getQueueAlbumArt(tlTracks): Promise<null> {
     return new Promise<null>((resolve, reject) => {
-      for (const tlTrack of tlTracks) {
-        this.getAlbumArt(tlTrack.track).then(url => {
-          for (const qi of this.queue) {
-            if(qi.tlid == tlTrack.tlid) {
-              qi.albumArt = url;
-              break;
+      this.getAlbumArts(tlTracks.map(val => val.track.uri))
+        .then(images => {
+          for (const tlTrack of tlTracks) {
+            for (const qi of this.queue) {
+              if(qi.tlid == tlTrack.tlid) {
+                qi.albumArt = images[tlTrack.track.uri][0].uri;
+                break;
+              }
             }
           }
+          resolve();
         });
-      }
     });
   }
   playQueueTrack(qi) {

@@ -20,6 +20,7 @@ export class BrowseResultsPage {
 
   refs: any[] = [];
   currentRef: any;
+  loadingArts: boolean = true;
 
   constructor(
     private navCtrl: NavController, 
@@ -50,7 +51,7 @@ export class BrowseResultsPage {
 
   private getArts(): Promise<null> {
     return new Promise<null>((resolve, reject) => {
-      this.mp.getAlbumArts(this.currentRef.uri, this.refs.map(val => val.uri)).then(images => {
+      this.mp.getAlbumArts(this.refs.map(val => val.uri)).then(images => {
         console.log(images);
         this.zone.run(() => {
           for (let r of this.refs) {
@@ -59,7 +60,7 @@ export class BrowseResultsPage {
               r.albumArt = images[sanitizedUri][0].uri;
             }
           }
-
+          this.loadingArts = false;
         });
         // for (let r of this.refs) {
         //   const sanitizedUri = this.fixSpotifyWebUris(r.uri);

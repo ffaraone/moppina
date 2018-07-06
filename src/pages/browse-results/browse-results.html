@@ -11,8 +11,9 @@
 <ion-content>
   <ion-list>
     <button ion-item *ngFor="let ref of refs" (click)="browseOrPlay(ref)" [attr.detail-none]="ref.type == 'directory' ? null: 'true'">
-      <ion-icon item-start *ngIf="ref.type == 'directory' && !ref.albumArt" name="folder" style="zoom: 2" color="mh-dark-blue"></ion-icon>
-      <ion-icon item-start *ngIf="ref.type != 'directory' && !ref.albumArt" name="musical-notes" style="zoom: 2" color="mh-dark-blue"></ion-icon>
+      <ion-spinner item-start name="bubbles" style="zoom: 1.5" color="mh-dark-blue" *ngIf="loadingArts"></ion-spinner>
+      <ion-icon item-start *ngIf="ref.type == 'directory' && !ref.albumArt && !loadingArts" name="folder" style="zoom: 1.5" color="mh-dark-blue"></ion-icon>
+      <ion-icon item-start *ngIf="ref.type != 'directory' && !ref.albumArt && !loadingArts" name="musical-notes" style="zoom: 1.5" color="mh-dark-blue"></ion-icon>
       <ion-thumbnail item-start *ngIf="ref.albumArt">
           <img [src]="ref.albumArt">
         </ion-thumbnail>
