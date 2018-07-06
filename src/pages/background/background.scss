@@ -1,0 +1,24 @@
+page-background {
+    ion-card {
+        position: relative;
+        text-align: center;
+      }
+    
+      .card-title {
+        position: absolute;
+        top: 36%;
+        font-size:4.0em;
+        width: 100%;
+        font-weight: bold;
+        color: map-get($colors, mh-blue);
+      }
+    
+      .card-subtitle {
+        font-size: 1.0em;
+        position: absolute;
+        top: 52%;
+        width: 100%;
+        color: map-get($colors, mh-dark-blue);
+      }
+}
+
