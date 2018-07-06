@@ -1,5 +1,5 @@
 import { MopidyProvider } from '../../providers/mopidy/mopidy';
-import { Component, ViewChild } from '@angular/core';
+import { Component, NgZone, ViewChild } from '@angular/core';
 import {
   ActionSheetController,
   Content,
@@ -25,6 +25,7 @@ export class BrowseResultsPage {
     private navCtrl: NavController, 
     private asCtrl: ActionSheetController,
     private navParams: NavParams,
+    private zone: NgZone,
     public mp: MopidyProvider) {
   }
 
@@ -49,17 +50,24 @@ export class BrowseResultsPage {
 
   private getArts(): Promise<null> {
     return new Promise<null>((resolve, reject) => {
-      this.mp.getAlbumArts(this.refs.map(val => val.uri)).then(images => {
+      this.mp.getAlbumArts(this.currentRef.uri, this.refs.map(val => val.uri)).then(images => {
         console.log(images);
-        for (let r of this.refs) {
-          const sanitizedUri = this.fixSpotifyWebUris(r.uri);
-          console.log(sanitizedUri);
-          if (sanitizedUri in images && images[sanitizedUri].length > 0) {
-            console.log(images[sanitizedUri][0].uri);
-            r.albumArt = images[sanitizedUri][0].uri;
+        this.zone.run(() => {
+          for (let r of this.refs) {
+            const sanitizedUri = this.fixSpotifyWebUris(r.uri);
+            if (sanitizedUri in images && images[sanitizedUri].length > 0) {
+              r.albumArt = images[sanitizedUri][0].uri;
+            }
           }
-        }
-        this.content.resize();
+
+        });
+        // for (let r of this.refs) {
+        //   const sanitizedUri = this.fixSpotifyWebUris(r.uri);
+        //   if (sanitizedUri in images && images[sanitizedUri].length > 0) {
+        //     r.albumArt = images[sanitizedUri][0].uri;
+        //   }
+        // }
+        // this.content.resize();
       });
     });
   }
@@ -94,6 +102,9 @@ export class BrowseResultsPage {
   // }
   browseUri() {
     this.mp.browse(this.currentRef.uri).then(refs => {
+      for (const r of refs) {
+        r.albumArt = '';
+      }
       this.refs = refs;
       this.getArts();
     });

@@ -156,8 +156,11 @@ export class MopidyProvider {
     });
   }
 
-  public getAlbumArts(uris): Promise<any> {
-    return this.http.post('http://mophile.velasuci.com:6680/moppina/api/', uris).toPromise();
+  public getAlbumArts(parent, uris): Promise<any> {
+    return this.http.post('http://mophile.velasuci.com:6680/moppina/api/', {
+      parent: parent,
+      uris: uris
+    }).toPromise();
   }
 
   public getArtistPicture(artist): Promise<string> {
@@ -239,7 +242,7 @@ export class MopidyProvider {
   clearAndPlayQueue(uri) {
     this.mopidy.tracklist.clear().then(() => {
       this.mopidy.tracklist.add(null, null, uri).then(() => {
-        this.mopidy.playback.play(null, 0);
+        this.mopidy.playback.play(null, 1);
       })
     });
   }

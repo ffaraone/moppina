@@ -14,7 +14,7 @@
       <ion-icon item-start *ngIf="ref.type == 'directory' && !ref.albumArt" name="folder" style="zoom: 2" color="mh-dark-blue"></ion-icon>
       <ion-icon item-start *ngIf="ref.type != 'directory' && !ref.albumArt" name="musical-notes" style="zoom: 2" color="mh-dark-blue"></ion-icon>
       <ion-thumbnail item-start *ngIf="ref.albumArt">
-          <img src="{{ ref.albumArt }}">
+          <img [src]="ref.albumArt">
         </ion-thumbnail>
       <h2 ion-text color="mh-blue">{{ ref.name }}</h2>
       <button ion-button outline item-end color="mh-blue" *ngIf="ref.type != 'directory'" large (click)="showOptions(ref); $event.stopPropagation();"><ion-icon name="cog"></ion-icon></button>
