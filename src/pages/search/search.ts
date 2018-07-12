@@ -16,11 +16,21 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SearchPage {
 
+  searchText: string = '';
+  resultsVisible: boolean = false;
+
   constructor(public mp: MopidyProvider) {
   }
 
   ionViewDidLoad() {
-    this.mp.search('The Beatles').then((res) => console.log(res));
+    // this.mp.search('The Beatles').then((res) => console.log(res));
   }
-
+  search() {
+    console.log(this.searchText);
+  }
+  onKeyboardStateChange(state) {
+    console.log(state);
+    this.resultsVisible = state === 'hide';
+  }
 }
+

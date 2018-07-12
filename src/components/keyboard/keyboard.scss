@@ -1,0 +1,28 @@
+keyboard {
+    .btn-std {
+        width: 48px;
+        height: 48px;
+        text-transform: none;
+    }
+    .btn-special {
+        width: 64px;
+        height: 48px;
+    }
+    .btn-special-large {
+        width: 80px;
+        height: 48px;
+    }
+    .btn-special-xlarge {
+        width: 512px;
+        height: 48px;
+    }
+    .line {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .keyboard-container {
+        padding-top: 5px;
+    }
+
+}

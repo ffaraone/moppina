@@ -18,7 +18,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
     HttpClientModule,
     IonicModule.forRoot(MyApp, {
       mode: 'ios'}),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [

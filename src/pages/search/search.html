@@ -6,13 +6,24 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>search</ion-title>
+  <ion-navbar class="moppina-navbar">
+    <ion-title>Search</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content>
+  <div class="input-box">
+      <ion-input class="search-input" type="text" 
+      [(ngModel)]="searchText"  
+      (enter)="search()" (keyboardStateChange)="onKeyboardStateChange($event)"
+      [keyboardColor]="'mh-blue'"
+      keyboard></ion-input>
+  </div>
+<div *ngIf="resultsVisible">
+  <ion-list>
+    <ion-item>Hello world</ion-item>
+  </ion-list>
+</div>
 </ion-content>
