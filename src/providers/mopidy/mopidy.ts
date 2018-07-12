@@ -281,7 +281,6 @@ export class MopidyProvider {
     return this.mopidy.library.lookup(uri);
   }
   search(query) {
-    console.log(this.mopidy.audio);
-    return this.mopidy.library.search({'albumartist': [query]}, ['local:'], true)
+    return this.mopidy.library.search({'albumartist': [query]})
   }
 }

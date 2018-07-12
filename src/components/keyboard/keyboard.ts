@@ -22,6 +22,7 @@ export class KeyboardComponent {
   visible: boolean = false;
 
   shift: boolean = false;
+  alt: boolean = false;
 
 
   @Output()
@@ -44,17 +45,27 @@ export class KeyboardComponent {
     this.shift = what === 'on';
     this.currentMap = this.shift ? this.layout.shift : this.layout.base;
   }
+  toggleAlt(what) {
+    this.alt = what === 'on';
+    this.currentMap = this.alt ? this.layout.alt : this.layout.base;
+  }
   buttonClicked(key) {
     console.log(this.color);
     if (this.isKey(key)) {
       this.toggleShift('off');
+      this.toggleAlt('off');
       this.keyPressed.emit(key);
     } else {
       console.log(key);
       switch (key) {
         case '{shift}':
+          this.toggleAlt('off');
           this.toggleShift(this.shift ? 'off': 'on');
           break;
+        case '{alt}':
+          this.toggleShift('off');
+          this.toggleAlt(this.alt ? 'off': 'on');
+          break;        
         case '{bksp}':
         case '{enter}':
           this.keyPressed.emit(key);
@@ -66,7 +77,10 @@ export class KeyboardComponent {
     return key === '{space}' || key === '{alt}' || this.isKey(key);
   }
   isKey(key) {
-    return !key.startsWith('{') && !key.endsWith('}');
+    return !(key.startsWith('{') && key.endsWith('}'));
+  }
+  isSpacerKey(key) {
+    return key === '{empty}';
   }
   getSpecialButtonIcon(key) {
     switch (key) {

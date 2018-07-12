@@ -1,6 +1,6 @@
 import { NgControl } from '../../../node_modules/@angular/forms';
 import { KeyboardComponent } from '../../components/keyboard/keyboard';
-import { EventEmitter, Input } from '@angular/core';
+import { EventEmitter, Input, Optional } from '@angular/core';
 import {
   AfterViewInit,
   ComponentFactoryResolver,
@@ -8,24 +8,20 @@ import {
   ElementRef,
   HostListener,
   Output,
-  Renderer,
   ViewContainerRef
   } from '@angular/core';
 
-/**
- * Generated class for the KeyboardDirective directive.
- *
- * See https://angular.io/api/core/Directive for more info on Angular
- * Directives.
- */
+  import { TextInput } from "ionic-angular";
+
 @Directive({
-  selector: '[keyboard]' // Attribute selector
+  selector: 'ion-input[keyboard]'
 })
 export class KeyboardDirective implements AfterViewInit {
 
   keyboard: KeyboardComponent;
 
   inputElement: HTMLInputElement = null;
+  ionicElement: TextInput = null;
 
   currentValue: string = '';
 
@@ -42,55 +38,58 @@ export class KeyboardDirective implements AfterViewInit {
   constructor(private elementRef: ElementRef, 
     private viewContainerRef: ViewContainerRef,
     private resolver: ComponentFactoryResolver,
-    private ngControl: NgControl,
-    private renderer: Renderer) {
+    @Optional() private ngControl: NgControl) {
   }
 
   @HostListener('focus')
   onFocus() {
     const pos = this.currentValue.length;
     this.inputElement.setSelectionRange(pos, pos);
-    console.log('on focus from directive');
     if (this.keyboard.visible) {
       return;
     }
-    this.currentValue = '';
-    this.ngControl.valueAccessor.writeValue(this.currentValue);
     this.keyboard.visible = true;
     this.keyboardStateChange.emit('show');
   }
 
+  @HostListener('keyup', ["$event"])
+  onkeyup(evt: KeyboardEvent) {
+    if (evt && evt.keyCode === 13) {
+      this.doEnter();
+      return;
+    }
+    this.currentValue = this.inputElement.value;
+  }
+
+
   ngAfterViewInit() {
     let element = this.elementRef.nativeElement;
-    if (element.tagName === 'INPUT') {
-      console.log('element is htmlinput');
-      this.inputElement = element;
-    } else {
-      console.log('element is ioninput');
-      this.inputElement = element.getElementsByTagName('input')[0];
-    }
+    this.ionicElement = this.elementRef.nativeElement as TextInput;
+    this.inputElement = element.getElementsByTagName('input')[0];
     this.loadComponent();
   }
 
-  // private getInput() {
-  //   return this.elInput.nativeElement.children[0];
-  // }
-  // doBksp() {
-  //   if (this.htmlInput.value && this.htmlInput.value.length > 0) {
-  //     this.htmlInput.value = this.htmlInput.value.substr(0, this.htmlInput.value.length - 2);
-  //   }
-  // }
-  // addChar(key) { 
-  //   const ionInputEle:BaseInput<string>  = this.elInput.nativeElement;
-  //   ionInputEle.value = 'ciccio';
-  //   //this.getInput().value += key;
-  //   // this.htmlInput.value += key;
-  // }
+  updateValue() {
+    if (this.ngControl) {
+      this.ngControl.viewToModelUpdate(this.currentValue);
+      this.ngControl.valueAccessor.writeValue(this.currentValue);
+    } else {
+      // this.ionicElement.value = this.currentValue;
+      this.inputElement.value = this.currentValue;
+    }
+  }
 
-  // setInputValue() {
-  //   this.renderer.setElementProperty(this.inputElement, 'value', this.currentValue);
-  // }
-  
+  doEnter() {
+    this.keyboard.visible = false;
+    this.keyboardStateChange.emit('hide');
+    this.enter.emit(this.currentValue);
+  }
+  doBksp() {
+    if (this.currentValue.length > 0) {
+      this.currentValue = this.currentValue.slice(0, this.currentValue.length - 1);
+      this.updateValue();
+    }
+  }
 
   loadComponent() {
     let factory = this.resolver.resolveComponentFactory(KeyboardComponent);
@@ -103,20 +102,14 @@ export class KeyboardDirective implements AfterViewInit {
         console.log(key);
         switch (key) {
           case '{bksp}':
-            if (this.currentValue.length > 0) {
-              this.currentValue = this.currentValue.slice(0, this.currentValue.length - 1);
-              this.ngControl.valueAccessor.writeValue(this.currentValue);
-            }
-            // this.doBksp();
+            this.doBksp();
             break;
           case '{enter}':
-            this.keyboard.visible = false;
-            this.keyboardStateChange.emit('hide');
-            this.enter.emit(this.currentValue);
+            this.doEnter();
             break;
           default:
             this.currentValue += key;
-            this.ngControl.valueAccessor.writeValue(this.currentValue);
+            this.updateValue();
             break;
         } 
       }
