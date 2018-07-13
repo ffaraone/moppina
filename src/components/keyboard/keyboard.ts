@@ -70,6 +70,9 @@ export class KeyboardComponent {
         case '{enter}':
           this.keyPressed.emit(key);
           break;
+        case '{space}':
+          this.keyPressed.emit(' ');
+          break;
       }
     }
   }

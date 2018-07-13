@@ -41,7 +41,7 @@ export class KeyboardDirective implements AfterViewInit {
     @Optional() private ngControl: NgControl) {
   }
 
-  @HostListener('focus')
+  @HostListener('ionFocus')
   onFocus() {
     const pos = this.currentValue.length;
     this.inputElement.setSelectionRange(pos, pos);

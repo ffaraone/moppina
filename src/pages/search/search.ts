@@ -1,6 +1,11 @@
 import { MopidyProvider } from '../../providers/mopidy/mopidy';
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  PopoverController
+  } from 'ionic-angular';
 
 /**
  * Generated class for the SearchPage page.
@@ -22,6 +27,7 @@ export class SearchPage {
 
   constructor(
     private zone: NgZone,
+    private popCtrl: PopoverController,
     public mp: MopidyProvider) {
   }
 
@@ -78,6 +84,12 @@ export class SearchPage {
         });
       });
     });
+  }
+  showPopover(event) {
+    console.log(event);
+    let popover = this.popCtrl.create('SearchPopoverPage');
+    popover.present({ev: event});
+    //setTimeout(() => popover.dismiss(), 15000);
   }
 }
 
