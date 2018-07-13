@@ -1,0 +1,14 @@
+<!-- Generated template for the KeyboardComponent component -->
+<div class="keyboard-container" *ngIf="visible">
+  <div *ngIf="layout">
+    <div *ngFor="let line of currentMap" class="line">
+      <div *ngFor="let key of line">
+        <button *ngIf="isSpacerKey(key)" [ngClass]="getButtonClass(key)" ion-button class="btn-std" disabled="true" outline></button>
+        <button *ngIf="isTextButton(key) && !isSpacerKey(key)" [ngClass]="getButtonClass(key)" ion-button class="btn-std" (click)="buttonClicked(key)" [color]="color" outline>{{ key|keyText }}</button>
+        <button *ngIf="!isTextButton(key) && !isSpacerKey(key)" [ngClass]="getButtonClass(key)" ion-button icon-only (click)="buttonClicked(key)" [color]="color" outline>
+          <ion-icon [name]="getSpecialButtonIcon(key)"></ion-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

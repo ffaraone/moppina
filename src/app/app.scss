@@ -1,6 +1,5 @@
 // http://ionicframework.com/docs/theming/
 
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -16,46 +15,60 @@
 // automatically applied to the <body> element in the app.
 ion-icon {
     &[class*="custom-"] {
-      mask-size: contain;
-      mask-position: 50% 50%;
-      mask-repeat: no-repeat;
-      background: currentColor;
-      width: 1em;
-      height: 1em;
+        mask-size: contain;
+        mask-position: 50% 50%;
+        mask-repeat: no-repeat;
+        background: currentColor;
+        width: 1em;
+        height: 1em;
     }
-  
+
     &[class*="custom-spotify"] {
-      mask-image: url(../assets/icon/spotify.svg);
-    }  
-    &[class*="custom-tunein"] {
-      mask-image: url(../assets/icon/tunein.svg);
+        mask-image: url(../assets/icon/spotify.svg);
     }
+
+    &[class*="custom-tunein"] {
+        mask-image: url(../assets/icon/tunein.svg);
+    }
+
     &[class*="custom-podcast"] {
-      mask-image: url(../assets/icon/podcast.svg);
-    } 
+        mask-image: url(../assets/icon/podcast.svg);
+    }
+
     &[class*="custom-itunes"] {
-      mask-image: url(../assets/icon/itunes.svg);
-    } 
+        mask-image: url(../assets/icon/itunes.svg);
+    }
+
     &[class*="custom-file-audio"] {
-      mask-image: url(../assets/icon/file-audio.svg);
-    } 
-  }
+        mask-image: url(../assets/icon/file-audio.svg);
+    }
+
+    &[class*="custom-shift"] {
+        mask-image: url(../assets/icon/shift.svg);
+    }
+
+    &[class*="custom-enter"] {
+        mask-image: url(../assets/icon/enter.svg);
+    }
+}
 
 ion-tabs > div.tabbar.show-tabbar {
     zoom: 1.3;
 }
+
 // .scroll-content {
 //   overflow-y: hidden;
 // }
-  
-  
-::-webkit-scrollbar
-{
+
+::-webkit-scrollbar {
     width: 0px;
 }
-::-webkit-scrollbar-track-piece
-{
+
+::-webkit-scrollbar-track-piece {
     background-color: transparent;
     -webkit-border-radius: 6px;
 }
 
+.moppina-navbar {
+    zoom: 1.3;
+}

@@ -1,4 +1,4 @@
-import { SearchPage } from './search';
+import { SearchPopoverPage } from './search-popover';
 import { ComponentsModule } from '../../components/components.module';
 import { DirectivesModule } from '../../directives/directives.module';
 import { NgModule } from '@angular/core';
@@ -6,12 +6,12 @@ import { IonicPageModule } from 'ionic-angular';
 
 @NgModule({
   declarations: [
-    SearchPage,
+    SearchPopoverPage,
   ],
   imports: [
-    IonicPageModule.forChild(SearchPage),
+    IonicPageModule.forChild(SearchPopoverPage),
     ComponentsModule,
     DirectivesModule
   ],
 })
-export class SearchPageModule {}
+export class SearchPopoverPageModule {}

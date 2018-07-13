@@ -73,34 +73,6 @@ export class BrowseResultsPage {
     });
   }
 
-
-  // private getArts(): Promise<null> {
-  //   return new Promise<null>((resolve, reject) => {
-  //     for (const r of this.refs) {
-  //       this.mp.lookup(r.uri).then(tracks => {
-  //         if (r.uri.startsWith('spotifyweb:yourmusic:album:')) {
-  //           r.uri = 'spotify:album:' + r.uri.substring(27);
-  //         } else if (r.uri.startsWith('spotifyweb:yourmusic:artist:')) {
-  //           r.uri = 'spotify:artist:' + r.uri.substring(28);
-  //         } else if (r.uri.startsWith('spotifyweb:sauce:artist:')) {
-  //           r.uri = 'spotify:artist:' + r.uri.substring(24);
-  //         } else if (r.uri.startsWith('spotifyweb:sauce:album:')) {
-  //           r.uri = 'spotify:album:' + r.uri.substring(23);
-  //         }
-  //         const myRef = tracks && tracks.length > 0 ? tracks[0] : r;
-  //         if (!r.uri.startsWith('local:artist:')) {
-  //           this.mp.getAlbumArt(myRef).then(url => {
-  //             r.albumArt = url;
-  //           });
-  //         } else {
-  //           this.mp.getArtistPicture(r.name).then(url => {
-  //             r.albumArt = url;
-  //           });
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
   browseUri() {
     this.mp.browse(this.currentRef.uri).then(refs => {
       for (const r of refs) {

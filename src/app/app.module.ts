@@ -19,7 +19,7 @@ import { SettingsProvider } from '../providers/settings/settings';
     HttpClientModule,
     IonicModule.forRoot(MyApp, {
       mode: 'ios'}),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
