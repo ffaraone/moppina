@@ -1,6 +1,5 @@
 import { SearchPopoverPage } from './search-popover';
 import { ComponentsModule } from '../../components/components.module';
-import { DirectivesModule } from '../../directives/directives.module';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 
@@ -10,8 +9,7 @@ import { IonicPageModule } from 'ionic-angular';
   ],
   imports: [
     IonicPageModule.forChild(SearchPopoverPage),
-    ComponentsModule,
-    DirectivesModule
+    ComponentsModule
   ],
 })
 export class SearchPopoverPageModule {}

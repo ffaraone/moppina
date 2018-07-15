@@ -14,10 +14,14 @@ export class KeyTextPipe implements PipeTransform {
    */
   transform(value: string, ...args) {
     switch (value) {
-      case '{alt}':
-        return 'alt';
       case '{space}':
         return '';
+      case '{123}':
+        return '123';
+      case '{ABC}':
+        return 'ABC';
+      case '{#+=}':
+        return '#+=';
       default:
         return value;
     }

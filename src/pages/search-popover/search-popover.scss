@@ -1,13 +1,11 @@
 page-search-popover {
-    .input-box {
-        padding-left: 15px;
-        padding-right: 15px;
-        padding-bottom: 15px;
+    .search-box {
+        padding-top: 5px;
     }
     .search-input {
         zoom: 1.2;
         border: 1px solid map-get($colors, mh-blue);
-        color: map-get($colors, mh-green);
+        color: map-get($colors, mh-dark-blue);
         font-size: 18px;
         padding-left: 5px;
         padding-right: 5px;

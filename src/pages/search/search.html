@@ -17,10 +17,6 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="!resultsVisible">
-    <ion-input class="search-input" type="text" (enter)="search($event)" (keyboardStateChange)="onKeyboardStateChange($event)"
-      [keyboardColor]="'mh-blue'" clearInput placeholder="Search..." keyboard></ion-input>
-  </div>
   <div *ngIf="resultsVisible">
     <div *ngFor="let result of results">
       <div *ngIf="result.artists || result.albums || result.tracks">

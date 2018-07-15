@@ -102,8 +102,9 @@ $img-placeholder-background: #242424;
 $searchbar-ios-input-clear-icon-color: map-get($colors, mh-blue);
 
 $popover-ios-width: 100%;
-$popover-ios-background: #242424;
-$popover-ios-text-color: map-get($colors, mh-blue);
+
+$text-input-ios-input-clear-icon-color: opacify(map-get($colors, mh-dark-blue), .5);
+$text-input-ios-input-clear-icon-size: 32px;
 
 
 // Ionicons
