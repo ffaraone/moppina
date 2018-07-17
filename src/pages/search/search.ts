@@ -66,7 +66,9 @@ export class SearchPage {
         console.log('promises '  + promises.length);
         Promise.all(promises).then(() => {
           console.log('loading arts finished');
-          this.loadingArts = false;
+          this.zone.run(() => {
+            this.loadingArts = false;
+          });
         });
       });
     }

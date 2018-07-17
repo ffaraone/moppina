@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-item class="search-box" no-lines>
-    <ion-input class="search-input" [(ngModel)]="query" type="text" placeholder="Search artists, albums, tracks, streams" clearInput #queryInput>
+    <ion-input class="search-input" (keyup)="keyUp($event)" [(ngModel)]="query" type="text" placeholder="Search artists, albums, tracks, streams" clearInput #queryInput>
     </ion-input>
   </ion-item>
   <keyboard (keyPressed)="keyPressed($event)" (bkspPressed)="backspace()" (searchPressed)="search()"></keyboard>

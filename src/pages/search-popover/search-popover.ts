@@ -48,4 +48,9 @@ export class SearchPopoverPage {
   search() {
     this.viewCtrl.dismiss(this.query);
   }
+  keyUp(evt: KeyboardEvent) {
+    if (evt.keyCode === 13) {
+      this.viewCtrl.dismiss(this.query);
+    }
+  }
 }
