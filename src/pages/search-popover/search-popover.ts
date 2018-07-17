@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   IonicPage,
   NavController,
   NavParams,
+  TextInput,
   ViewController
   } from 'ionic-angular';
 
@@ -20,6 +21,31 @@ import {
 })
 export class SearchPopoverPage {
 
+  @ViewChild('queryInput') queryInput: TextInput;
+
+
+  htmlElem: HTMLInputElement;
+
+  query: string = '';
+
+
+
   constructor(private viewCtrl: ViewController) {
+  }
+
+  ionViewDidLoad() {
+    this.htmlElem = this.queryInput.getNativeElement();
+  }
+
+  keyPressed(key) {
+    this.query += key;
+    this.queryInput.setFocus();
+  }
+  backspace() {
+    this.query = this.query.slice(0, this.query.length - 1)
+    this.queryInput.setFocus();
+  }
+  search() {
+    this.viewCtrl.dismiss(this.query);
   }
 }

@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar class="moppina-navbar">
-    <ion-title>Search</ion-title>
+    <ion-title>Search {{ query }}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="showPopover($event)">
         <ion-icon name="search"></ion-icon>
@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="resultsVisible">
+  <div *ngIf="results">
     <div *ngFor="let result of results">
       <div *ngIf="result.artists || result.albums || result.tracks">
         <h3 ion-text color="mh-blue">{{ result.title }}</h3>

@@ -25,6 +25,8 @@ export class SearchPage {
   results: any;
   loadingArts: boolean = true;
 
+  query: string = '';
+
   constructor(
     private zone: NgZone,
     private popCtrl: PopoverController,
@@ -34,9 +36,10 @@ export class SearchPage {
   ionViewDidLoad() {
     // this.mp.search('The Beatles').then((res) => console.log(res));
   }
-  search(query) {
-    if (query) {
-      this.mp.search(query).then((res) => {
+  search() {
+    if (this.query) {
+      this.loadingArts = true;
+      this.mp.search(this.query).then((res) => {
         console.log(res);
         for (let r of res) {
           if (r.uri.startsWith('tunein:search')) {
@@ -62,6 +65,7 @@ export class SearchPage {
         }
         console.log('promises '  + promises.length);
         Promise.all(promises).then(() => {
+          console.log('loading arts finished');
           this.loadingArts = false;
         });
       });
@@ -74,22 +78,29 @@ export class SearchPage {
   private getArts(refs): Promise<null> {
     return new Promise<null>((resolve, reject) => {
       this.mp.getAlbumArts(refs.map(val => val.uri)).then(images => {
-        this.zone.run(() => {
+        //this.zone.run(() => {
           for (let r of refs) {
             //const sanitizedUri = this.fixSpotifyWebUris(r.uri);
             if (r.uri in images && images[r.uri].length > 0) {
-              r.albumArt = images[r.uri][0].uri;
+              this.zone.run(() => {
+                r.albumArt = images[r.uri][0].uri;
+              });
+              //r.albumArt = images[r.uri][0].uri;
             }
           }
+          resolve();
         });
-      });
+      //});
     });
   }
   showPopover(event) {
     console.log(event);
     let popover = this.popCtrl.create('SearchPopoverPage');
+    popover.onDidDismiss((data) => {
+      this.query = data;
+      this.search();
+    });
     popover.present({ev: event});
-    //setTimeout(() => popover.dismiss(), 15000);
   }
 }
 

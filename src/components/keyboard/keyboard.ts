@@ -67,8 +67,10 @@ export class KeyboardComponent {
           this.toggleNumeric();
           break;        
         case '{bksp}':
+          this.bkspPressed.emit();
+          break;
         case '{enter}':
-          this.keyPressed.emit(key);
+          this.searchPressed.emit();
           break;
         case '{space}':
           this.keyPressed.emit(' ');
