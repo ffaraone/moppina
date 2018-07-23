@@ -1,37 +1,37 @@
 <ion-content [ngStyle]="{'background-image': 'url(' + backgroundImage + ')'}">
-    <div class="volume-box">
-        <ion-range min="0" max="100" color="mh-blue" snap="true" step="5" [(ngModel)]="mp.state.volume" (ionBlur)="mp.setVolume()" debounce="0" [disabled]="!mopidyOnline">
-            <ion-icon range-left name="volume-mute" color="mh-blue" class="volume-icon"></ion-icon>
-            <ion-icon name="volume-up" range-right color="mh-blue" class="volume-icon"></ion-icon>
+    <div class="mop-volume-box">
+        <ion-range min="0" max="100" color="primary" snap="true" step="5" [(ngModel)]="mp.state.volume" (ionBlur)="mp.setVolume()" debounce="0" [disabled]="!mopidyOnline">
+            <ion-icon range-left name="volume-mute" color="primary" class="mop-volume-icon"></ion-icon>
+            <ion-icon name="volume-up" range-right color="primary" class="mop-volume-icon"></ion-icon>
         </ion-range>
     </div>
-    <div class="center-box">
-        <div class="cover-image-box">
+    <div class="mop-center-box">
+        <div class="mop-cover-image-box">
             <img [src]="mp.state.albumArt">
         </div>
-        <div class="center-right-box">
-            <div class="playback-buttons-box">
-                    <button ion-fab color="mh-blue" class="playback-skip-button" (click)="mp.previous()" [disabled]="!mopidyOnline">
+        <div class="mop-center-right-box">
+            <div class="mop-playback-buttons-box">
+                    <button ion-fab color="primary" class="mop-playback-skip-button" (click)="mp.previous()" [disabled]="!mopidyOnline">
                         <ion-icon name="skip-backward"></ion-icon>
                     </button>
-                    <button ion-fab color="mh-blue" class="playback-play-pause-button" (click)="mp.playPause()" [disabled]="!mopidyOnline">
+                    <button ion-fab color="primary" class="mop-playback-play-pause-button" (click)="mp.playPause()" [disabled]="!mopidyOnline">
                         <ion-icon name="{{ mp.state.playbackState == 'playing' ? 'pause': 'play' }}"></ion-icon>
                     </button>
-                    <button ion-fab color="mh-blue" class="playback-skip-button" (click)="mp.next()" [disabled]="!mopidyOnline">
+                    <button ion-fab color="primary" class="mop-playback-skip-button" (click)="mp.next()" [disabled]="!mopidyOnline">
                         <ion-icon name="skip-forward"></ion-icon>
                     </button>
             </div>
             <div>
-                <h3 ion-text color="mh-blue">{{ mp.state.trackName }}</h3>
-                <h5 ion-text color="mh-dark-blue">{{ mp.state.trackInfo }}</h5>
-                <!-- <p ion-text color="mh-dark-blue"><strong>{{ trackCodec | uppercase }}</strong> - {{ trackBitrate }}</p> -->
+                <h3 ion-text color="primary">{{ mp.state.trackName }}</h3>
+                <h5 ion-text color="primary-dark">{{ mp.state.trackInfo }}</h5>
+                <!-- <p ion-text color="primary-dark"><strong>{{ trackCodec | uppercase }}</strong> - {{ trackBitrate }}</p> -->
             </div>
         </div>
     </div>
-    <div class="seek-box">
-        <ion-range min="0" [max]="mp.state.trackLength" [(ngModel)]="mp.state.trackSeekPos" color="mh-blue" (ionBlur)="mp.seek()" debounce="100" [disabled]="!mopidyOnline">
-            <ion-icon range-left name="rewind" color="mh-blue" class="seek-icon"></ion-icon>
-            <ion-icon name="fastforward" range-right color="mh-blue" class="seek-icon"></ion-icon>
+    <div class="mop-seek-box">
+        <ion-range min="0" [max]="mp.state.trackLength" [(ngModel)]="mp.state.trackSeekPos" color="primary" (ionBlur)="mp.seek()" debounce="100" [disabled]="!mopidyOnline">
+            <ion-icon range-left name="rewind" color="primary" class="mop-seek-icon"></ion-icon>
+            <ion-icon name="fastforward" range-right color="primary" class="mop-seek-icon"></ion-icon>
         </ion-range>
     </div>
 </ion-content>

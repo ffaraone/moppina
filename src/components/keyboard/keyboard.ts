@@ -107,17 +107,17 @@ export class KeyboardComponent {
   getButtonClass(key) {
     switch (key) {
       case '{space}':
-        return 'btn-special-xlarge';
+        return 'mop-btn-special-xlarge';
       case '{bksp}':
       case '{enter}':
-        return 'btn-special-large';
+        return 'mop-btn-special-large';
       case '{shift}':
       case '{ABC}':
       case '{123}':
       case '{#+=}':
-        return 'btn-special';
+        return 'mop-btn-special';
       default:
-        return 'btn-std';
+        return 'mop-btn-std';
     }    
   }
 }

@@ -34,15 +34,13 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:        #488aff,
-  secondary:      #32db64,
   danger:         #f53d3d,
   light:          #f4f4f4,
   dark:           #222,
-  mh-blue:        #54ffff,
-  mh-dark-blue:   #387e7d,
-  mh-green:       #22fb3b,
-  mh-dark-green:  #147c1b
+  primary:        #54ffff,
+  primary-dark:   #387e7d,
+  secondary:       #22fb3b,
+  secondary-dark:  #147c1b
 );
 
 
@@ -78,33 +76,33 @@ $colors: (
 
 @import "ionic.theme.dark";
 
-$range-ios-knob-background-color: map-get($colors, mh-blue);
-$range-ios-bar-background-color: map-get($colors, mh-dark-blue);
+$range-ios-knob-background-color: map-get($colors, primary);
+$range-ios-bar-background-color: map-get($colors, primary-dark);
 
-$tabs-ios-tab-color-inactive: map-get($colors, mh-dark-green);
-$tabs-ios-tab-color-active: map-get($colors, mh-green);
+$tabs-ios-tab-color-inactive: map-get($colors, secondary-dark);
+$tabs-ios-tab-color-active: map-get($colors, secondary);
 
 $list-ios-activated-background-color: #000;
-$item-ios-detail-push-color: map-get($colors, mh-blue);
+$item-ios-detail-push-color: map-get($colors, primary);
 
-$toolbar-ios-button-color: map-get($colors, mh-green);
-$toolbar-ios-title-text-color: map-get($colors, mh-green);
+$toolbar-ios-button-color: map-get($colors, secondary);
+$toolbar-ios-title-text-color: map-get($colors, secondary);
 
 $action-sheet-ios-background: #242424;
 $action-sheet-ios-button-cancel-background: #242424;
 $action-sheet-ios-border-color: #000;
-$action-sheet-ios-title-color: map-get($colors, mh-green);
+$action-sheet-ios-title-color: map-get($colors, secondary);
 $action-sheet-ios-title-font-size: 1.6rem;
-$action-sheet-ios-button-text-color: map-get($colors, mh-blue);
+$action-sheet-ios-button-text-color: map-get($colors, primary);
 
 $img-placeholder-background: #242424;
 
-$searchbar-ios-input-clear-icon-color: map-get($colors, mh-blue);
+$searchbar-ios-input-clear-icon-color: map-get($colors, primary);
 
 $popover-ios-width: 100%;
 $popover-ios-min-width: 100%;
 
-$text-input-ios-input-clear-icon-color: opacify(map-get($colors, mh-dark-blue), .5);
+$text-input-ios-input-clear-icon-color: opacify(map-get($colors, primary-dark), .5);
 $text-input-ios-input-clear-icon-size: 32px;
 
 

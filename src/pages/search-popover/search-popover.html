@@ -5,8 +5,8 @@
   Ionic pages and navigation.-->
 
 <ion-content>
-  <ion-item class="search-box" no-lines>
-    <ion-input class="search-input" (keyup)="keyUp($event)" [(ngModel)]="query" type="text" placeholder="Search artists, albums, tracks, streams" clearInput #queryInput>
+  <ion-item class="mop-search-box" no-lines>
+    <ion-input class="mop-search-input" (keyup)="keyUp($event)" [(ngModel)]="query" type="text" placeholder="Search artists, albums, tracks, streams" clearInput #queryInput>
     </ion-input>
   </ion-item>
   <keyboard (keyPressed)="keyPressed($event)" (bkspPressed)="backspace()" (searchPressed)="search()"></keyboard>

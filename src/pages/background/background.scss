@@ -10,7 +10,7 @@ page-background {
         font-size:4.0em;
         width: 100%;
         font-weight: bold;
-        color: map-get($colors, mh-blue);
+        color: map-get($colors, primary);
       }
     
       .card-subtitle {
@@ -18,7 +18,7 @@ page-background {
         position: absolute;
         top: 52%;
         width: 100%;
-        color: map-get($colors, mh-dark-blue);
+        color: map-get($colors, primary-dark);
       }
 }
 

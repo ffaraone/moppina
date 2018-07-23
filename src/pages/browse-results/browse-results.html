@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar class="moppina-navbar" hideBackButton>
+  <ion-navbar class="mop-navbar" hideBackButton>
       <ion-buttons left>
           <button ion-button (click)="back()">
               <ion-icon name="arrow-back"></ion-icon>&nbsp;Back
@@ -11,14 +11,14 @@
 <ion-content>
   <ion-list>
     <button ion-item *ngFor="let ref of refs" (click)="browseOrPlay(ref)" [attr.detail-none]="ref.type == 'directory' ? null: 'true'">
-      <ion-spinner item-start name="bubbles" style="zoom: 1.5" color="mh-dark-blue" *ngIf="loadingArts"></ion-spinner>
-      <ion-icon item-start *ngIf="ref.type == 'directory' && !ref.albumArt && !loadingArts" name="folder" style="zoom: 1.5" color="mh-dark-blue"></ion-icon>
-      <ion-icon item-start *ngIf="ref.type != 'directory' && !ref.albumArt && !loadingArts" name="musical-notes" style="zoom: 1.5" color="mh-dark-blue"></ion-icon>
+      <ion-spinner item-start name="bubbles" class="mop-results-icon" color="primary-dark" *ngIf="loadingArts"></ion-spinner>
+      <ion-icon item-start *ngIf="ref.type == 'directory' && !ref.albumArt && !loadingArts" name="folder" class="mop-results-icon" color="primary-dark"></ion-icon>
+      <ion-icon item-start *ngIf="ref.type != 'directory' && !ref.albumArt && !loadingArts" name="musical-notes" class="mop-results-icon" color="primary-dark"></ion-icon>
       <ion-thumbnail item-start *ngIf="ref.albumArt">
           <img [src]="ref.albumArt">
         </ion-thumbnail>
-      <h2 ion-text color="mh-blue">{{ ref.name }}</h2>
-      <button ion-button outline item-end color="mh-blue" *ngIf="ref.type != 'directory'" large (click)="showOptions(ref); $event.stopPropagation();"><ion-icon name="cog"></ion-icon></button>
+      <h2 ion-text color="primary">{{ ref.name }}</h2>
+      <button ion-button outline item-end color="primary" *ngIf="ref.type != 'directory'" large (click)="showOptions(ref); $event.stopPropagation();"><ion-icon name="cog"></ion-icon></button>
     </button>
   </ion-list>
 </ion-content>

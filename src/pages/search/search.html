@@ -6,7 +6,7 @@
 -->
 <ion-header>
 
-  <ion-navbar class="moppina-navbar">
+  <ion-navbar class="mop-navbar">
     <ion-title>Search {{ query }}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="showPopover($event)">
@@ -20,41 +20,41 @@
   <div *ngIf="results">
     <div *ngFor="let result of results">
       <div *ngIf="result.artists || result.albums || result.tracks">
-        <h3 ion-text color="mh-blue">{{ result.title }}</h3>
+        <h3 ion-text color="primary">{{ result.title }}</h3>
         <ion-item-group *ngIf="result.artists && result.artists.length > 0">
-          <ion-item-divider color="mh-dark-blue">Artists</ion-item-divider>
+          <ion-item-divider color="primary-dark">Artists</ion-item-divider>
           <button ion-item *ngFor="let artist of result.artists" (click)="browseArtist(artist)">
-            <ion-spinner item-start name="bubbles" style="zoom: 1.5" color="mh-dark-blue" *ngIf="loadingArts && !artist.albumArt"></ion-spinner>
-            <ion-icon item-start *ngIf="!artist.albumArt && !loadingArts" name="musical-notes" style="zoom: 1.5" color="mh-dark-blue"></ion-icon>
+            <ion-spinner item-start name="bubbles" class="mop-results-icon" color="primary-dark" *ngIf="loadingArts && !artist.albumArt"></ion-spinner>
+            <ion-icon item-start *ngIf="!artist.albumArt && !loadingArts" name="musical-notes" class="mop-results-icon" color="primary-dark"></ion-icon>
             <ion-thumbnail item-start *ngIf="artist.albumArt">
               <img [src]="artist.albumArt">
             </ion-thumbnail>
-            <h2 ion-text color="mh-blue">{{ artist.name }}</h2>
-            <!-- <button ion-button outline item-end color="mh-blue" *ngIf="ref.type != 'directory'" large (click)="showOptions(ref); $event.stopPropagation();"><ion-icon name="cog"></ion-icon></button> -->
+            <h2 ion-text color="primary">{{ artist.name }}</h2>
+            <!-- <button ion-button outline item-end color="primary" *ngIf="ref.type != 'directory'" large (click)="showOptions(ref); $event.stopPropagation();"><ion-icon name="cog"></ion-icon></button> -->
           </button>
         </ion-item-group>
         <ion-item-group *ngIf="result.albums && result.albums.length > 0">
-          <ion-item-divider color="mh-dark-blue">Albums</ion-item-divider>
+          <ion-item-divider color="primary-dark">Albums</ion-item-divider>
           <button ion-item *ngFor="let album of result.albums" (click)="browseAlbum(album)">
-            <ion-spinner item-start name="bubbles" style="zoom: 1.5" color="mh-dark-blue" *ngIf="loadingArts && !album.albumArt"></ion-spinner>
-            <ion-icon item-start *ngIf="!album.albumArt && !loadingArts" name="musical-notes" style="zoom: 1.5" color="mh-dark-blue"></ion-icon>
+            <ion-spinner item-start name="bubbles" class="mop-results-icon" color="primary-dark" *ngIf="loadingArts && !album.albumArt"></ion-spinner>
+            <ion-icon item-start *ngIf="!album.albumArt && !loadingArts" name="musical-notes" class="mop-results-icon" color="primary-dark"></ion-icon>
             <ion-thumbnail item-start *ngIf="album.albumArt">
               <img [src]="album.albumArt">
             </ion-thumbnail>
-            <h2 ion-text color="mh-blue">{{ album.name }}</h2>
-            <!-- <button ion-button outline item-end color="mh-blue" *ngIf="ref.type != 'directory'" large (click)="showOptions(ref); $event.stopPropagation();"><ion-icon name="cog"></ion-icon></button> -->
+            <h2 ion-text color="primary">{{ album.name }}</h2>
+            <!-- <button ion-button outline item-end color="primary" *ngIf="ref.type != 'directory'" large (click)="showOptions(ref); $event.stopPropagation();"><ion-icon name="cog"></ion-icon></button> -->
           </button>
         </ion-item-group>
         <ion-item-group *ngIf="result.tracks && result.tracks.length > 0">
-          <ion-item-divider color="mh-dark-blue">Tracks</ion-item-divider>
+          <ion-item-divider color="primary-dark">Tracks</ion-item-divider>
           <button ion-item *ngFor="let track of result.tracks" (click)="browseTrack(track)">
-            <ion-spinner item-start name="bubbles" style="zoom: 1.5" color="mh-dark-blue" *ngIf="loadingArts && !track.albumArt"></ion-spinner>
-            <ion-icon item-start *ngIf="!track.albumArt && !loadingArts" name="musical-notes" style="zoom: 1.5" color="mh-dark-blue"></ion-icon>
+            <ion-spinner item-start name="bubbles" class="mop-results-icon" color="primary-dark" *ngIf="loadingArts && !track.albumArt"></ion-spinner>
+            <ion-icon item-start *ngIf="!track.albumArt && !loadingArts" name="musical-notes" class="mop-results-icon" color="primary-dark"></ion-icon>
             <ion-thumbnail item-start *ngIf="track.albumArt">
               <img [src]="track.albumArt">
             </ion-thumbnail>
-            <h2 ion-text color="mh-blue">{{ track.name }}</h2>
-            <!-- <button ion-button outline item-end color="mh-blue" *ngIf="ref.type != 'directory'" large (click)="showOptions(ref); $event.stopPropagation();"><ion-icon name="cog"></ion-icon></button> -->
+            <h2 ion-text color="primary">{{ track.name }}</h2>
+            <!-- <button ion-button outline item-end color="primary" *ngIf="ref.type != 'directory'" large (click)="showOptions(ref); $event.stopPropagation();"><ion-icon name="cog"></ion-icon></button> -->
           </button>
         </ion-item-group>
       </div>

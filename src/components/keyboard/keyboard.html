@@ -1,10 +1,10 @@
 <!-- Generated template for the KeyboardComponent component -->
-<div class="keyboard-container">
+<div class="mop-keyboard-container">
   <div *ngIf="layout">
-    <div *ngFor="let line of currentMap" class="line">
+    <div *ngFor="let line of currentMap" class="mop-line">
       <div *ngFor="let key of line">
-        <button *ngIf="isTextButton(key)" [ngClass]="getButtonClass(key)" ion-button class="btn-std" (click)="buttonClicked(key)" color="mh-blue" outline>{{ key|keyText }}</button>
-        <button *ngIf="!isTextButton(key)" [ngClass]="getButtonClass(key)" ion-button icon-only (click)="buttonClicked(key)" color="mh-blue" outline>
+        <button *ngIf="isTextButton(key)" [ngClass]="getButtonClass(key)" ion-button class="mop-btn-std" (click)="buttonClicked(key)" color="primary" outline>{{ key|keyText }}</button>
+        <button *ngIf="!isTextButton(key)" [ngClass]="getButtonClass(key)" ion-button icon-only (click)="buttonClicked(key)" color="primary" outline>
           <ion-icon [name]="getSpecialButtonIcon(key)"></ion-icon>
         </button>
       </div>

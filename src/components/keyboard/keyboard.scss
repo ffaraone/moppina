@@ -1,27 +1,27 @@
 keyboard {
-    .btn-std {
+    .mop-btn-std {
         width: 64px;
         height: 64px;
         text-transform: none;
     }
-    .btn-special {
+    .mop-btn-special {
         width: 80px;
         height: 64px;
     }
-    .btn-special-large {
+    .mop-btn-special-large {
         width: 96px;
         height: 64px;
     }
-    .btn-special-xlarge {
+    .mop-btn-special-xlarge {
         width: 400px;
         height: 64px;
     }
-    .line {
+    .mop-line {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
     }
-    .keyboard-container {
+    .mop-keyboard-container {
         padding: 8px;
     }
 

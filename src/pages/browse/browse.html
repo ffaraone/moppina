@@ -1,13 +1,13 @@
 <ion-header>
-  <ion-navbar class="moppina-navbar">
+  <ion-navbar class="mop-navbar">
     <ion-title>Browse</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content>
   <ion-list>
     <button ion-item *ngFor="let backend of mp.browseState.backends" (click)="browse(backend)">
-      <ion-icon item-start [name]="backend.icon" style="zoom: 2" color="mh-dark-blue"></ion-icon>
-      <h1 ion-text color="mh-blue">{{ backend.name }}</h1>
+      <ion-icon item-start [name]="backend.icon" style="zoom: 2" color="primary-dark"></ion-icon>
+      <h1 ion-text color="primary">{{ backend.name }}</h1>
     </button>
   </ion-list>
 </ion-content>

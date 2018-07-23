@@ -52,14 +52,6 @@ ion-icon {
     }
 }
 
-ion-tabs > div.tabbar.show-tabbar {
-    zoom: 1.3;
-}
-
-// .scroll-content {
-//   overflow-y: hidden;
-// }
-
 ::-webkit-scrollbar {
     width: 0px;
 }
@@ -69,6 +61,10 @@ ion-tabs > div.tabbar.show-tabbar {
     -webkit-border-radius: 6px;
 }
 
-.moppina-navbar {
+.mop-navbar {
+    zoom: 1.3;
+}
+
+ion-tabs.mop-tabs > div.tabbar.show-tabbar {
     zoom: 1.3;
 }
